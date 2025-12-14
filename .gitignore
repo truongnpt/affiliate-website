@@ -47,3 +47,4 @@ lerna-debug.log*
 
 # Optional: pnpm cache files
 /node_modules/.cache
+.vercel
