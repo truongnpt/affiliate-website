@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { apiProductCategories } from '../../../../services/product-categories';
+import { apiProductCategories } from '../../../../api/product-categories';
 
 const iconProductCategories = [
   {
@@ -22,7 +22,7 @@ const iconProductCategories = [
   },
 ];
 const ProductCategories = () => {
-  const { data: productCategories = [], isLoading } = useQuery({
+  const { data: productCategories, isLoading } = useQuery({
     queryKey: ['product_categories'],
     queryFn: async () => await apiProductCategories.getList(),
   });
@@ -72,7 +72,7 @@ const ProductCategories = () => {
         <div className="mb-10 text-center">
           <p className="text-gray-600 mb-2">
             <span className="font-bold text-[#ff5183] text-lg">
-              {productCategories?.data?.length || 0}
+              {productCategories?.count || 0}
             </span>{' '}
             danh mục sản phẩm TikTok Shop
           </p>
@@ -116,7 +116,7 @@ const ProductCategories = () => {
                 <div className="absolute bottom-3 left-3 right-3 z-20">
                   <div className="bg-white/95 backdrop-blur-sm px-4 py-2 rounded-lg shadow-md">
                     <p className="text-sm font-bold text-gray-900">
-                      {category?.productCount?.toLocaleString('vi-VN') || 0} sản
+                      {category?.products?.length || 0} sản
                       phẩm
                     </p>
                   </div>

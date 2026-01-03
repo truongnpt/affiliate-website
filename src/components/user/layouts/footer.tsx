@@ -1,4 +1,6 @@
+'use client';
 import React from 'react';
+import { appConfig } from '../../../config/app.config';
 
 export const Footer = () => {
   return (
@@ -7,36 +9,38 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <i className="fa-brands fa-tiktok text-3xl text-[#ff5183]"></i>
+              <i className={`fa-brands fa-tiktok text-3xl`} style={{ color: appConfig.colors.primary }}></i>
               <div>
-                <span className="text-xl font-bold text-[#ff5183] block">
-                  NờPêTê TikTok Shop
+                <span className="text-xl font-bold block" style={{ color: appConfig.colors.primary }}>
+                  {appConfig.name}
                 </span>
                 <span className="text-xs text-gray-500">
-                  Click vào link để mua hàng
+                  {appConfig.tagline}
                 </span>
               </div>
             </div>
             <p className="text-gray-400 mb-4 text-sm leading-relaxed">
-              Website cung cấp link sản phẩm TikTok Shop chính thức. Click vào
-              link để tự động thêm vào giỏ hàng và mua ngay với giá tốt nhất!
+              {appConfig.description}
             </p>
-            <div className="bg-[#ff5183]/10 border border-[#ff5183]/20 rounded-lg p-3 mb-6">
+            <div className="rounded-lg p-3 mb-6" style={{ backgroundColor: `${appConfig.colors.primary}10`, border: `1px solid ${appConfig.colors.primary}20` }}>
               <p className="text-xs text-gray-300 flex items-center gap-2">
-                <i className="fa-solid fa-shield-halved text-green-400"></i>
-                <span>100% Link TikTok Shop chính thức - An toàn & Uy tín</span>
+                <i className={`${appConfig.features.trustedBadge.icon} text-green-400`}></i>
+                <span>{appConfig.features.trustedBadge.text}</span>
               </p>
             </div>
             <div className="flex items-center space-x-4">
               <a
-                href="https://www.tiktok.com/@nopete_affiliate"
+                href={appConfig.social.tiktok.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-[#ff5183] transition-colors flex items-center gap-2 group"
+                className="text-gray-400 hover:transition-colors flex items-center gap-2 group"
+                style={{ color: 'inherit' }}
+                onMouseEnter={(e) => e.currentTarget.style.color = appConfig.colors.primary}
+                onMouseLeave={(e) => e.currentTarget.style.color = ''}
                 title="Kênh TikTok của tôi"
               >
                 <i className="fa-brands fa-tiktok text-2xl group-hover:scale-110 transition-transform"></i>
-                <span className="text-sm">@nopete_affiliate</span>
+                <span className="text-sm">{appConfig.social.tiktok.username}</span>
               </a>
             </div>
           </div>
@@ -48,8 +52,11 @@ export const Footer = () => {
             <ul className="space-y-3 text-gray-400">
               <li>
                 <a
-                  href="/product-categories"
-                  className="hover:text-[#ff5183] transition-colors flex items-center gap-2"
+                  href={appConfig.navigation.productCategories}
+                  className="transition-colors flex items-center gap-2"
+                  style={{ color: 'inherit' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = appConfig.colors.primary}
+                  onMouseLeave={(e) => e.currentTarget.style.color = ''}
                 >
                   <i className="fa-solid fa-chevron-right text-xs"></i>
                   Tất cả danh mục
@@ -57,8 +64,11 @@ export const Footer = () => {
               </li>
               <li>
                 <a
-                  href="/products"
-                  className="hover:text-[#ff5183] transition-colors flex items-center gap-2"
+                  href={appConfig.navigation.products}
+                  className="transition-colors flex items-center gap-2"
+                  style={{ color: 'inherit' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = appConfig.colors.primary}
+                  onMouseLeave={(e) => e.currentTarget.style.color = ''}
                 >
                   <i className="fa-solid fa-chevron-right text-xs"></i>
                   Xem tất cả sản phẩm
@@ -67,24 +77,24 @@ export const Footer = () => {
               <li className="pt-2">
                 <p className="text-xs text-gray-500 mb-2">Danh mục phổ biến:</p>
                 <div className="flex flex-wrap gap-2">
-                  <a
-                    href="/products?category=1"
-                    className="text-xs bg-gray-800 hover:bg-[#ff5183] hover:text-white px-3 py-1 rounded-full transition-colors"
-                  >
-                    Điện tử
-                  </a>
-                  <a
-                    href="/products?category=2"
-                    className="text-xs bg-gray-800 hover:bg-[#ff5183] hover:text-white px-3 py-1 rounded-full transition-colors"
-                  >
-                    Thời trang
-                  </a>
-                  <a
-                    href="/products?category=3"
-                    className="text-xs bg-gray-800 hover:bg-[#ff5183] hover:text-white px-3 py-1 rounded-full transition-colors"
-                  >
-                    Làm đẹp
-                  </a>
+                  {appConfig.popularCategories.map((category) => (
+                    <a
+                      key={category.id}
+                      href={category.href}
+                      className="text-xs bg-gray-800 hover:text-white px-3 py-1 rounded-full transition-colors"
+                      style={{ color: 'inherit' }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = appConfig.colors.primary;
+                        e.currentTarget.style.color = 'white';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '';
+                        e.currentTarget.style.color = '';
+                      }}
+                    >
+                      {category.name}
+                    </a>
+                  ))}
                 </div>
               </li>
             </ul>
@@ -97,8 +107,11 @@ export const Footer = () => {
             <ul className="space-y-3 text-gray-400">
               <li>
                 <a
-                  href="/about"
-                  className="hover:text-[#ff5183] transition-colors flex items-center gap-2"
+                  href={appConfig.navigation.about}
+                  className="transition-colors flex items-center gap-2"
+                  style={{ color: 'inherit' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = appConfig.colors.primary}
+                  onMouseLeave={(e) => e.currentTarget.style.color = ''}
                 >
                   <i className="fa-solid fa-chevron-right text-xs"></i>
                   Giới thiệu
@@ -106,8 +119,11 @@ export const Footer = () => {
               </li>
               <li>
                 <a
-                  href="/blogs"
-                  className="hover:text-[#ff5183] transition-colors flex items-center gap-2"
+                  href={appConfig.navigation.blogs}
+                  className="transition-colors flex items-center gap-2"
+                  style={{ color: 'inherit' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = appConfig.colors.primary}
+                  onMouseLeave={(e) => e.currentTarget.style.color = ''}
                 >
                   <i className="fa-solid fa-chevron-right text-xs"></i>
                   Blog
@@ -115,8 +131,11 @@ export const Footer = () => {
               </li>
               <li>
                 <a
-                  href="/contact"
-                  className="hover:text-[#ff5183] transition-colors flex items-center gap-2"
+                  href={appConfig.navigation.contact}
+                  className="transition-colors flex items-center gap-2"
+                  style={{ color: 'inherit' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = appConfig.colors.primary}
+                  onMouseLeave={(e) => e.currentTarget.style.color = ''}
                 >
                   <i className="fa-solid fa-chevron-right text-xs"></i>
                   Liên hệ
@@ -138,8 +157,11 @@ export const Footer = () => {
             <ul className="space-y-3 text-gray-400">
               <li>
                 <a
-                  href="/support"
-                  className="hover:text-[#ff5183] transition-colors flex items-center gap-2"
+                  href={appConfig.navigation.support}
+                  className="transition-colors flex items-center gap-2"
+                  style={{ color: 'inherit' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = appConfig.colors.primary}
+                  onMouseLeave={(e) => e.currentTarget.style.color = ''}
                 >
                   <i className="fa-solid fa-chevron-right text-xs"></i>
                   Trung tâm hỗ trợ
@@ -147,8 +169,11 @@ export const Footer = () => {
               </li>
               <li>
                 <a
-                  href="/terms"
-                  className="hover:text-[#ff5183] transition-colors flex items-center gap-2"
+                  href={appConfig.navigation.terms}
+                  className="transition-colors flex items-center gap-2"
+                  style={{ color: 'inherit' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = appConfig.colors.primary}
+                  onMouseLeave={(e) => e.currentTarget.style.color = ''}
                 >
                   <i className="fa-solid fa-chevron-right text-xs"></i>
                   Điều khoản dịch vụ
@@ -157,9 +182,9 @@ export const Footer = () => {
               <li className="pt-2 border-t border-gray-800">
                 <p className="text-xs text-gray-500 mb-2">Cách sử dụng:</p>
                 <ol className="text-xs text-gray-400 space-y-1 list-decimal list-inside">
-                  <li>Click vào link sản phẩm</li>
-                  <li>Tự động mở TikTok Shop</li>
-                  <li>Thêm vào giỏ hàng & mua</li>
+                  {appConfig.features.usageSteps.map((step, index) => (
+                    <li key={index}>{step}</li>
+                  ))}
                 </ol>
               </li>
             </ul>
@@ -169,16 +194,19 @@ export const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-gray-400 text-sm text-center md:text-left">
               <p>
-                &copy; 2025 NờPêTê TikTok Shop. Thuộc quyền sở hữu của NờPêTê.
+                &copy; {appConfig.copyright.year} {appConfig.name}. Thuộc quyền sở hữu của {appConfig.copyright.owner}.
               </p>
               <p className="text-xs text-gray-500 mt-1">
-                Website cung cấp link TikTok Shop chính thức
+                {appConfig.copyright.text}
               </p>
             </div>
             <div className="flex items-center gap-4">
               <a
-                href="/products"
-                className="bg-[#ff5183] hover:bg-[#ff006e] text-white px-6 py-2 rounded-lg font-semibold text-sm transition-colors flex items-center gap-2"
+                href={appConfig.navigation.products}
+                className="text-white px-6 py-2 rounded-lg font-semibold text-sm transition-colors flex items-center gap-2"
+                style={{ backgroundColor: appConfig.colors.primary }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = appConfig.colors.primaryHover}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = appConfig.colors.primary}
               >
                 <i className="fa-solid fa-shopping-cart"></i>
                 Xem sản phẩm ngay

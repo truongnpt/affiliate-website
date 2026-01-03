@@ -1,1 +1,12 @@
-/* Placeholder content for globals.css */
+:root {
+  --background: #ffffff;
+  --primary: #ff5183;
+  --primary-hover: #ff006e;
+  --primary-active: #ff006e;
+  --primary-text: #ffffff;
+  --primary-text-hover: #ffffff;
+  --primary-text-active: #ffffff;
+  --primary-border: #ff5183;
+  --primary-border-hover: #ff006e;
+  --primary-border-active: #ff006e;
+}

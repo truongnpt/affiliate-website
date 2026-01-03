@@ -47,11 +47,10 @@ const Home = () => {
               <div className="flex flex-col sm:flex-row gap-4">
                 <a
                   href="/products"
-                  className="bg-white text-[#f83e72] px-8 py-4 rounded-lg font-bold hover:bg-gray-50 transition-all transform hover:scale-105 flex items-center justify-center shadow-lg"
+                  className="bg-white text-[#f83e72] px-4 py-2 rounded-lg font-bold hover:bg-gray-50 transition-all transform hover:scale-105 flex items-center justify-center shadow-lg"
                 >
                   <i className="fa-solid fa-cart-shopping mr-2"></i>
                   Xem sản phẩm nào
-                  <i className="fa-solid fa-arrow-right ml-2"></i>
                 </a>
                 <a
                   href="https://www.tiktok.com/@nopete_affiliate"
@@ -60,7 +59,6 @@ const Home = () => {
                 >
                   <i className="fa-brands fa-tiktok mr-2"></i>
                   Kênh TikTok của tôi
-                  <i className="fa-solid fa-external-link-alt ml-2"></i>
                 </a>
               </div>
             </div>

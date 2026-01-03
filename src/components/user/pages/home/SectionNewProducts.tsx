@@ -1,107 +1,21 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import ProductCard from '../products/ProductCard';
+import { apiProducts } from '../../../../api/products';
 
 const SectionNewProducts = () => {
-  // Mock data for new products
-  const products = [
-    {
-      id: 1,
-      name: 'Tai nghe Bluetooth chống ồn',
-      price: 599000,
-      discount: 15,
-      category: 'Điện tử',
-      image:
-        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aGVhZHBob25lc3xlbnwwfHwwfHx8MA%3D%3D',
-      rating: 4.8,
-      sales: 1200,
-      url: 'https://example.com/product-1',
-    },
-    {
-      id: 2,
-      name: 'Áo thun cotton cao cấp',
-      price: 199000,
-      discount: 20,
-      category: 'Thời trang',
-      image:
-        'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dCUyMHNoaXJ0fGVufDB8fDB8fHww',
-      rating: 4.5,
-      sales: 850,
-      url: 'https://example.com/product-2',
-    },
-    {
-      id: 3,
-      name: 'Kem dưỡng ẩm vitamin C',
-      price: 350000,
-      discount: 25,
-      category: 'Làm đẹp',
-      image:
-        'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2tpbmNhcmUlMjBwcm9kdWN0fGVufDB8fDB8fHww',
-      rating: 4.9,
-      sales: 2300,
-      url: 'https://example.com/product-3',
-    },
-    {
-      id: 4,
-      name: 'Đèn bàn học thông minh',
-      price: 450000,
-      discount: 10,
-      category: 'Nhà cửa',
-      image:
-        'https://images.unsplash.com/photo-1534073828943-f801091a7d58?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGRlc2slMjBsYW1wfGVufDB8fDB8fHww',
-      rating: 4.6,
-      sales: 500,
-      url: 'https://example.com/product-4',
-    },
-    {
-      id: 5,
-      name: 'Giày Running Sport',
-      price: 890000,
-      discount: 12,
-      category: 'Thời trang',
-      image:
-        'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2hvZXN8ZW58MHx8MHx8fDA%3D',
-      rating: 4.7,
-      sales: 1500,
-      url: 'https://example.com/product-5',
-    },
-    {
-      id: 6,
-      name: 'Loa Bluetooth Mini',
-      price: 320000,
-      discount: 18,
-      category: 'Điện tử',
-      image:
-        'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Ymx1ZXRvb3RoJTIwc3BlYWtlcnxlbnwwfHwwfHx8MA%3D%3D',
-      rating: 4.4,
-      sales: 900,
-      url: 'https://example.com/product-6',
-    },
-    {
-      id: 7,
-      name: 'Túi xách da thật',
-      price: 750000,
-      discount: 30,
-      category: 'Thời trang',
-      image:
-        'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aGFuZGJhZ3xlbnwwfHwwfHx8MA%3D%3D',
-      rating: 4.6,
-      sales: 600,
-      url: 'https://example.com/product-7',
-    },
-    {
-      id: 8,
-      name: 'Smartwatch đa năng',
-      price: 1290000,
-      discount: 22,
-      category: 'Điện tử',
-      image:
-        'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d2F0Y2h8ZW58MHx8MHx8fDA%3D',
-      rating: 4.8,
-      sales: 1800,
-      url: 'https://example.com/product-8',
-    },
-  ];
+  // Fetch new products
+  const { data: productsData, isLoading } = useQuery({
+    queryKey: ['new_products'],
+    queryFn: async () =>
+      await apiProducts.getList({
+        sortBy: 'newest',
+        limit: 12,
+      }),
+  });
+
+  const products = productsData?.data || [];
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(4);
@@ -136,6 +50,24 @@ const SectionNewProducts = () => {
       setCurrentIndex(newMaxIndex);
     }
   }, [itemsPerPage, currentIndex, products.length]);
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <section id="new-product" className="py-10 sm:py-16 lg:py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#ff5183] border-t-transparent"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Don't render if no products
+  if (products.length === 0) {
+    return null;
+  }
 
   const maxIndex = Math.max(0, products.length - itemsPerPage);
 
@@ -201,7 +133,7 @@ const SectionNewProducts = () => {
               transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)`,
             }}
           >
-            {products.map((product) => (
+            {products.map((product: any) => (
               <div
                 key={product.id}
                 className="flex-shrink-0 px-1.5 sm:px-2 lg:px-3"

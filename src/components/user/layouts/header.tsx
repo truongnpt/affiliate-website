@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { appConfig } from '../../../config/app.config';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -62,13 +63,13 @@ const Header = () => {
             <div className="flex-shrink-0">
               <a href="/" onClick={closeMenu}>
                 <div className="flex items-center space-x-2">
-                  <i className="fa-brands fa-tiktok text-2xl text-[#ff5183]"></i>
+                  <i className="fa-brands fa-tiktok text-2xl" style={{ color: appConfig.colors.primary }}></i>
                   <div className="flex flex-col">
                     <span className="text-xl font-bold text-gray-900 leading-tight">
-                      NờPêTê TikTok Shop
+                      {appConfig.name}
                     </span>
                     <span className="text-xs text-gray-500 -mt-0.5">
-                      Click vào link để mua hàng
+                      {appConfig.tagline}
                     </span>
                   </div>
                 </div>
@@ -79,32 +80,47 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <a
-              href="/products"
-              className="text-gray-700 hover:text-[#ff5183] font-medium transition-colors"
+              href={appConfig.navigation.products}
+              className="text-gray-700 font-medium transition-colors"
+              style={{ color: 'inherit' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = appConfig.colors.primary}
+              onMouseLeave={(e) => e.currentTarget.style.color = ''}
             >
               Sản phẩm
             </a>
             <a
-              href="/product-categories"
-              className="text-gray-700 hover:text-[#ff5183] font-medium transition-colors"
+              href={appConfig.navigation.productCategories}
+              className="text-gray-700 font-medium transition-colors"
+              style={{ color: 'inherit' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = appConfig.colors.primary}
+              onMouseLeave={(e) => e.currentTarget.style.color = ''}
             >
               Danh mục sản phẩm
             </a>
             <a
-              href="/blogs"
-              className="text-gray-700 hover:text-[#ff5183] font-medium transition-colors"
+              href={appConfig.navigation.blogs}
+              className="text-gray-700 font-medium transition-colors"
+              style={{ color: 'inherit' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = appConfig.colors.primary}
+              onMouseLeave={(e) => e.currentTarget.style.color = ''}
             >
               Blog
             </a>
             <a
-              href="/about"
-              className="text-gray-700 hover:text-[#ff5183] font-medium transition-colors"
+              href={appConfig.navigation.about}
+              className="text-gray-700 font-medium transition-colors"
+              style={{ color: 'inherit' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = appConfig.colors.primary}
+              onMouseLeave={(e) => e.currentTarget.style.color = ''}
             >
               Giới thiệu
             </a>
             <a
-              href="/support"
-              className="text-gray-700 hover:text-[#ff5183] font-medium transition-colors"
+              href={appConfig.navigation.support}
+              className="text-gray-700 font-medium transition-colors"
+              style={{ color: 'inherit' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = appConfig.colors.primary}
+              onMouseLeave={(e) => e.currentTarget.style.color = ''}
             >
               Hỗ trợ
             </a>
@@ -113,8 +129,11 @@ const Header = () => {
           <div className="flex items-center space-x-4">
             {/* Desktop Contact Button */}
             <a
-              href="/contact"
-              className="hidden md:inline-block bg-[#ff5183] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#ff5183]/80 transition-colors"
+              href={appConfig.navigation.contact}
+              className="hidden md:inline-block text-white px-4 py-2 rounded-lg font-medium transition-colors"
+              style={{ backgroundColor: appConfig.colors.primary }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = `${appConfig.colors.primary}CC`}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = appConfig.colors.primary}
             >
               Liên hệ
             </a>
@@ -122,7 +141,8 @@ const Header = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMenu}
-              className="menu-button md:hidden h-[40px] w-[40px] flex items-center justify-center p-2 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#ff5183] focus:ring-offset-2 transition-colors"
+              className="menu-button md:hidden h-[40px] w-[40px] flex items-center justify-center p-2 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors"
+              style={{ '--tw-ring-color': appConfig.colors.primary } as React.CSSProperties}
               aria-label="Toggle menu"
               aria-expanded={isMenuOpen}
             >
@@ -152,44 +172,57 @@ const Header = () => {
       >
         <nav className="flex flex-col px-4 py-6 space-y-4 min-h-full">
           <a
-            href="/products"
+            href={appConfig.navigation.products}
             onClick={closeMenu}
-            className="text-gray-700 hover:text-[#ff5183] font-medium py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors"
+            className="text-gray-700 font-medium py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors"
+            onMouseEnter={(e) => e.currentTarget.style.color = appConfig.colors.primary}
+            onMouseLeave={(e) => e.currentTarget.style.color = ''}
           >
             Sản phẩm
           </a>
           <a
-            href="/product-categories"
+            href={appConfig.navigation.productCategories}
             onClick={closeMenu}
-            className="text-gray-700 hover:text-[#ff5183] font-medium py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors"
+            className="text-gray-700 font-medium py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors"
+            onMouseEnter={(e) => e.currentTarget.style.color = appConfig.colors.primary}
+            onMouseLeave={(e) => e.currentTarget.style.color = ''}
           >
             Danh mục sản phẩm
           </a>
           <a
-            href="/blogs"
+            href={appConfig.navigation.blogs}
             onClick={closeMenu}
-            className="text-gray-700 hover:text-[#ff5183] font-medium py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors"
+            className="text-gray-700 font-medium py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors"
+            onMouseEnter={(e) => e.currentTarget.style.color = appConfig.colors.primary}
+            onMouseLeave={(e) => e.currentTarget.style.color = ''}
           >
             Blog
           </a>
           <a
-            href="/about"
+            href={appConfig.navigation.about}
             onClick={closeMenu}
-            className="text-gray-700 hover:text-[#ff5183] font-medium py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors"
+            className="text-gray-700 font-medium py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors"
+            onMouseEnter={(e) => e.currentTarget.style.color = appConfig.colors.primary}
+            onMouseLeave={(e) => e.currentTarget.style.color = ''}
           >
             Giới thiệu
           </a>
           <a
-            href="/support"
+            href={appConfig.navigation.support}
             onClick={closeMenu}
-            className="text-gray-700 hover:text-[#ff5183] font-medium py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors"
+            className="text-gray-700 font-medium py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors"
+            onMouseEnter={(e) => e.currentTarget.style.color = appConfig.colors.primary}
+            onMouseLeave={(e) => e.currentTarget.style.color = ''}
           >
             Hỗ trợ
           </a>
           <a
-            href="/contact"
+            href={appConfig.navigation.contact}
             onClick={closeMenu}
-            className="bg-[#ff5183] text-white px-4 py-3 rounded-lg font-medium hover:bg-[#ff5183]/80 transition-colors text-center mt-4"
+            className="text-white px-4 py-3 rounded-lg font-medium transition-colors text-center mt-4"
+            style={{ backgroundColor: appConfig.colors.primary }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = `${appConfig.colors.primary}CC`}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = appConfig.colors.primary}
           >
             Liên hệ
           </a>

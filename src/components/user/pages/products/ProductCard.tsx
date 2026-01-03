@@ -8,7 +8,9 @@ interface ProductCardProps {
     name: string;
     price: number;
     discount: number;
-    category: string;
+    product_categories: {
+      name: string;
+    };
     image: string;
     url: string;
     rating: number;
@@ -43,7 +45,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <div className="p-5">
         <div className="text-xs text-[#ff5183] font-semibold mb-2 uppercase tracking-wide flex items-center gap-1">
           <i className="fa-solid fa-tag"></i>
-          {product.category}
+          {product.product_categories.name}
         </div>
         <h3 className="text-gray-900 font-bold text-lg mb-3 line-clamp-2 min-h-[3.5rem] group-hover:text-[#ff5183] transition-colors">
           <a
@@ -56,30 +58,26 @@ const ProductCard = ({ product }: ProductCardProps) => {
           </a>
         </h3>
 
-        <div className="flex justify-between items-center mb-4">
-          <div>
-            <span className="text-gray-900 font-bold text-xl">
+        <span className="text-gray-900 font-bold text-xl">
               {product.price.toLocaleString('vi-VN')}đ
             </span>
-          </div>
-          <div className="flex items-center text-sm text-gray-600">
-            <i className="fa-solid fa-star text-yellow-400 mr-1"></i>
-            <span className="font-semibold">{product.rating}</span>
-            <span className="mx-1">•</span>
+          <div className="flex justify-between items-center text-sm text-gray-600 mb-3">
+            <div className="flex items-center gap-1">
+              <i className="fa-solid fa-star text-yellow-400 mr-1"></i>
+              <span className="font-semibold">{product.rating}</span>
+            </div>
             <span>{product.sales.toLocaleString('vi-VN')} đã bán</span>
           </div>
-        </div>
 
         <div className="border-t border-gray-100 pt-4">
           <a
             href={product.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full bg-gradient-to-r from-[#ff5183] to-[#ff006e] text-white py-3 rounded-lg font-bold text-sm hover:from-[#ff006e] hover:to-[#ff5183] transition-all transform hover:scale-105 flex justify-center items-center gap-2 shadow-lg hover:shadow-xl"
+            className="w-full bg-gradient-to-r from-[#ff5183] to-[#ff006e] text-white py-1 rounded-lg font-bold text-xs hover:from-[#ff006e] hover:to-[#ff5183] transition-all transform hover:scale-105 flex justify-center items-center gap-2 shadow-lg hover:shadow-xl"
           >
             <i className="fa-solid fa-cart-plus text-lg"></i>
             <span>CLICK XEM SẢN PHẨM</span>
-            <i className="fa-solid fa-arrow-right"></i>
           </a>
           <p className="text-xs text-center text-gray-500 mt-2">
             <i className="fa-solid fa-circle-check text-green-500 mr-1"></i>

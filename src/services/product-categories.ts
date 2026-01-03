@@ -1,15 +1,28 @@
-// API base URL - Next.js API routes run on the same domain
-// Use NEXT_PUBLIC_API_URL if set, otherwise use current origin
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL
-  ? `${process.env.NEXT_PUBLIC_API_URL}/api`
-  : '/api'; // Relative URL works for same-origin API routes
+import { supabase } from "@/lib/supabase";
 
 const getList = async () => {
-  const response = await fetch(`${apiBaseUrl}/product-categories`);
-  const data = await response.json();
-  return data;
+  try {
+    // Perform SELECT * FROM product_categories
+    const { data: categories, error } = await supabase
+        .from('product_categories')
+        .select('* , products(*)', { count: 'exact' }); // Select only necessary columns
+
+    if (error) {
+        console.error('Error fetching categories:', error);
+        return { message: 'Internal Server Error', error: error.message };
+    }
+
+    // Return the list of categories as JSON
+    return {
+        data: categories,
+        count: categories ? categories.length : 0
+    };
+} catch (err: any) {
+    console.error('Unexpected error:', err);
+    return { message: 'Internal Server Error', error: err.message };
+}  
 };
 
-export const apiProductCategories = {
+export const productCategoriesService = {
   getList,
 };
