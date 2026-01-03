@@ -16,11 +16,11 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
   { id: 'dashboard', label: 'Tổng quan', icon: 'fa-home', path: '/dashboard' },
-  { id: 'products', label: 'Sản phẩm', icon: 'fa-box', path: '/dashboard/products' },
-  { id: 'orders', label: 'Đơn hàng', icon: 'fa-shopping-cart', path: '/dashboard/orders' },
-  { id: 'affiliates', label: 'Đối tác', icon: 'fa-users', path: '/dashboard/affiliates' },
-  { id: 'analytics', label: 'Thống kê', icon: 'fa-chart-line', path: '/dashboard/analytics' },
-  { id: 'settings', label: 'Cài đặt', icon: 'fa-cog', path: '/dashboard/settings' },
+  { id: 'products', label: 'Sản phẩm', icon: 'fa-box', path: '/admin/products' },
+  { id: 'orders', label: 'Đơn hàng', icon: 'fa-shopping-cart', path: '/admin/orders' },
+  { id: 'affiliates', label: 'Đối tác', icon: 'fa-users', path: '/admin/affiliates' },
+  { id: 'analytics', label: 'Thống kê', icon: 'fa-chart-line', path: '/admin/analytics' },
+  { id: 'settings', label: 'Cài đặt', icon: 'fa-cog', path: '/admin/settings' },
 ];
 
 export default function DashboardLayout({
@@ -192,7 +192,7 @@ export default function DashboardLayout({
       </aside>
 
       {/* Main Content Area */}
-      <div className={`flex-1 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-20'} transition-all duration-300`}>
+      <div className={`flex-1 max-w-[calc(100%-16rem)] ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-20'} transition-all duration-300`}>
         {/* Top Header */}
         <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-20">
           <div className="px-4 sm:px-6 py-4">
@@ -242,7 +242,7 @@ export default function DashboardLayout({
 
         {/* Dashboard Content */}
         <main className="p-4 sm:p-6">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 min-h-[calc(100vh-120px)] p-4 sm:p-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 min-h-[calc(100vh-120px)] p-4 sm:p-6 overflow-x-auto">
             {children}
           </div>
         </main>

@@ -94,7 +94,7 @@ export function setUserData(user: User | null) {
 export const user = {
   get name() {
     const userData = getUser();
-    return userData?.name || 'Admin';
+    return userData?.full_name || userData?.name || 'Admin';
   },
   get data() {
     return getUser();

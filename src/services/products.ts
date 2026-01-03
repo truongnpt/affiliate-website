@@ -113,8 +113,91 @@ const getById = async (id: number) => {
   }
 };
 
+const create = async (product: {
+  name: string;
+  price: number;
+  discount?: number;
+  category_id: number;
+  image: string;
+  url: string;
+  rating?: number;
+  sales?: number;
+  description?: string;
+}) => {
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .insert([product])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error creating product:', error);
+      return { message: 'Error creating product', error: error.message };
+    }
+
+    return { data };
+  } catch (err: any) {
+    console.error('Unexpected error:', err);
+    return { message: 'Internal Server Error', error: err.message };
+  }
+};
+
+const update = async (id: number, product: {
+  name?: string;
+  price?: number;
+  discount?: number;
+  category_id?: number;
+  image?: string;
+  url?: string;
+  rating?: number;
+  sales?: number;
+  description?: string;
+}) => {
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .update(product)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error updating product:', error);
+      return { message: 'Error updating product', error: error.message };
+    }
+
+    return { data };
+  } catch (err: any) {
+    console.error('Unexpected error:', err);
+    return { message: 'Internal Server Error', error: err.message };
+  }
+};
+
+const deleteById = async (id: number) => {
+  try {
+    const { error } = await supabase
+      .from('products')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error deleting product:', error);
+      return { message: 'Error deleting product', error: error.message };
+    }
+
+    return { success: true };
+  } catch (err: any) {
+    console.error('Unexpected error:', err);
+    return { message: 'Internal Server Error', error: err.message };
+  }
+};
+
 export const productsService = {
   getList,
   getById,
+  create,
+  update,
+  deleteById,
 };
 
