@@ -15,12 +15,13 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  { id: 'dashboard', label: 'Tổng quan', icon: 'fa-home', path: '/dashboard' },
-  { id: 'products', label: 'Sản phẩm', icon: 'fa-box', path: '/admin/products' },
-  { id: 'orders', label: 'Đơn hàng', icon: 'fa-shopping-cart', path: '/admin/orders' },
-  { id: 'affiliates', label: 'Đối tác', icon: 'fa-users', path: '/admin/affiliates' },
-  { id: 'analytics', label: 'Thống kê', icon: 'fa-chart-line', path: '/admin/analytics' },
-  { id: 'settings', label: 'Cài đặt', icon: 'fa-cog', path: '/admin/settings' },
+  { id: 'dashboard', label: 'Dashboard', icon: 'fa-home', path: '/dashboard' },
+  { id: 'product-categories', label: 'Product Categories', icon: 'fa-list', path: '/admin/product-categories' },
+  { id: 'products', label: 'Products', icon: 'fa-box', path: '/admin/products' },
+  { id: 'orders', label: 'Orders', icon: 'fa-shopping-cart', path: '/admin/orders' },
+  { id: 'affiliates', label: 'Affiliates', icon: 'fa-users', path: '/admin/affiliates' },
+  { id: 'analytics', label: 'Analytics', icon: 'fa-chart-line', path: '/admin/analytics' },
+  { id: 'settings', label: 'Settings', icon: 'fa-cog', path: '/admin/settings' },
 ];
 
 export default function DashboardLayout({

@@ -9,7 +9,19 @@ import Button from '@/components/ui/Button';
 export default function ProductDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const id = Number(params.id);
+  const id = Number(params?.id);
+  if (!id) {
+    return (
+      <div className="text-center py-12">
+        <i className="fas fa-exclamation-circle text-4xl text-gray-400 mb-4"></i>
+        <p className="text-gray-600 mb-4">Không tìm thấy sản phẩm</p>
+        <Button onClick={() => router.back()}>
+          <i className="fas fa-arrow-left"></i>
+          <span>Quay lại</span>
+        </Button>
+      </div>
+    );
+  } 
 
   const { data: productData, isLoading } = useQuery({
     queryKey: ['product', id],
@@ -47,7 +59,7 @@ export default function ProductDetailPage() {
       <div className="flex justify-between items-center mb-6">
         <div>
           <button
-            onClick={() => router.push('/dashboard/products')}
+            onClick={() => router.back()}
             className="text-gray-600 hover:text-gray-900 mb-2 flex items-center space-x-2"
           >
             <i className="fas fa-arrow-left"></i>
@@ -58,7 +70,7 @@ export default function ProductDetailPage() {
         <div className="flex space-x-3">
           <Button
             variant="outline"
-            onClick={() => router.push(`/dashboard/products/${id}/edit`)}
+            onClick={() => router.push(`/admin/products/${id}/edit`)}
           >
             <i className="fas fa-edit mr-2"></i>
             Chỉnh sửa
@@ -181,7 +193,7 @@ export default function ProductDetailPage() {
               <Button
                 variant="outline"
                 className="w-full"
-                onClick={() => router.push(`/dashboard/products/${id}/edit`)}
+                onClick={() => router.push(`/admin/products/${id}/edit`)}
               >
                 <i className="fas fa-edit mr-2"></i>
                 Chỉnh sửa sản phẩm

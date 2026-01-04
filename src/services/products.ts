@@ -95,7 +95,7 @@ const getById = async (id: number) => {
   try {
     const { data: product, error } = await supabase
       .from('products')
-      .select('*')
+      .select('*, product_categories(*)')
       .eq('id', id)
       .single();
 

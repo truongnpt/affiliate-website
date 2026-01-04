@@ -6,15 +6,30 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiProducts } from '@/api/products';
 import { apiProductCategories } from '@/api/product-categories';
 import Button from '@/components/ui/Button';
+import { generateSlug } from '@/helpers/slug';
 
 export default function EditProductPage() {
   const router = useRouter();
   const params = useParams();
   const queryClient = useQueryClient();
-  const id = Number(params.id);
+  const id = Number(params?.id);
+  if (!id) {
+    return (
+      <div className="text-center py-12">
+        <i className="fas fa-exclamation-circle text-4xl text-gray-400 mb-4"></i>
+        <p className="text-gray-600 mb-4">Không tìm thấy sản phẩm</p>
+        <Button onClick={() => router.back()}>
+          <i className="fas fa-arrow-left"></i>
+          <span>Quay lại</span>
+        </Button>
+      </div>
+    );
+  }
 
   const [formData, setFormData] = useState({
     name: '',
+    slug: '',
+    excerpt: '',
     price: '',
     discount: '0',
     category_id: '',
@@ -24,6 +39,7 @@ export default function EditProductPage() {
     sales: '0',
     description: '',
   });
+  const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Fetch product
@@ -44,6 +60,8 @@ export default function EditProductPage() {
       const product = productData.data;
       setFormData({
         name: product.name || '',
+        slug: product.slug || '',
+        excerpt: product.excerpt || '',
         price: product.price?.toString() || '',
         discount: (product.discount || 0).toString(),
         category_id: product.category_id?.toString() || '',
@@ -53,6 +71,8 @@ export default function EditProductPage() {
         sales: (product.sales || 0).toString(),
         description: product.description || '',
       });
+      // Reset manual edit flag when product is loaded
+      setIsSlugManuallyEdited(!!product.slug);
     }
   }, [productData]);
 
@@ -65,7 +85,7 @@ export default function EditProductPage() {
       } else {
         queryClient.invalidateQueries({ queryKey: ['product', id] });
         queryClient.invalidateQueries({ queryKey: ['admin-products'] });
-        router.push(`/dashboard/products/${id}`);
+        router.push(`/admin/products/${id}`);
       }
     },
     onError: (error: any) => {
@@ -96,6 +116,8 @@ export default function EditProductPage() {
 
     updateProduct({
       name: formData.name.trim(),
+      slug: formData.slug.trim() || generateSlug(formData.name.trim()),
+      excerpt: formData.excerpt.trim() || undefined,
       price: Number(formData.price),
       discount: Number(formData.discount) || 0,
       category_id: Number(formData.category_id),
@@ -108,13 +130,35 @@ export default function EditProductPage() {
   };
 
   const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => {
+      const updated = { ...prev, [field]: value };
+      
+      // Auto-generate slug from name if name is changed and slug hasn't been manually edited
+      if (field === 'name' && !isSlugManuallyEdited) {
+        updated.slug = generateSlug(value);
+      }
+      
+      // Track if slug is manually edited
+      if (field === 'slug') {
+        setIsSlugManuallyEdited(true);
+      }
+      
+      return updated;
+    });
+    
     if (errors[field]) {
       setErrors(prev => {
         const newErrors = { ...prev };
         delete newErrors[field];
         return newErrors;
       });
+    }
+  };
+
+  const handleGenerateSlug = () => {
+    if (formData.name.trim()) {
+      setFormData(prev => ({ ...prev, slug: generateSlug(prev.name) }));
+      setIsSlugManuallyEdited(true);
     }
   };
 
@@ -134,7 +178,7 @@ export default function EditProductPage() {
       <div className="text-center py-12">
         <i className="fas fa-exclamation-circle text-4xl text-gray-400 mb-4"></i>
         <p className="text-gray-600 mb-4">Không tìm thấy sản phẩm</p>
-        <Button onClick={() => router.push('/dashboard/products')}>
+        <Button onClick={() => router.back()}>
           Quay lại danh sách
         </Button>
       </div>
@@ -146,7 +190,7 @@ export default function EditProductPage() {
       {/* Header */}
       <div className="mb-6">
         <button
-          onClick={() => router.push(`/dashboard/products/${id}`)}
+          onClick={() => router.back()}
           className="text-gray-600 hover:text-gray-900 mb-2 flex items-center space-x-2"
         >
           <i className="fas fa-arrow-left"></i>
@@ -177,6 +221,44 @@ export default function EditProductPage() {
                     placeholder="Nhập tên sản phẩm"
                   />
                   {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Slug
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={formData.slug}
+                      onChange={(e) => handleChange('slug', e.target.value)}
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent"
+                      placeholder="slug-tu-dong-tao"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleGenerateSlug}
+                      disabled={!formData.name.trim()}
+                      className="px-4 py-2 bg-[#ff5183] text-white rounded-lg hover:bg-[#ff006e] disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500 transition-colors"
+                      title="Tạo slug từ tên sản phẩm"
+                    >
+                      <i className="fas fa-magic"></i>
+                    </button>
+                  </div>
+                  <p className="mt-1 text-xs text-gray-500">Đường dẫn URL (tự động tạo từ tên sản phẩm)</p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Tóm tắt
+                  </label>
+                  <textarea
+                    value={formData.excerpt}
+                    onChange={(e) => handleChange('excerpt', e.target.value)}
+                    rows={3}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent"
+                    placeholder="Nhập tóm tắt ngắn gọn về sản phẩm"
+                  />
                 </div>
 
                 <div>
@@ -258,7 +340,6 @@ export default function EditProductPage() {
                     value={formData.price}
                     onChange={(e) => handleChange('price', e.target.value)}
                     min="0"
-                    step="1000"
                     className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent ${
                       errors.price ? 'border-red-500' : 'border-gray-300'
                     }`}
@@ -364,7 +445,7 @@ export default function EditProductPage() {
                   type="button"
                   variant="outline"
                   className="w-full"
-                  onClick={() => router.push(`/dashboard/products/${id}`)}
+                  onClick={() => router.back()}
                 >
                   Hủy
                 </Button>

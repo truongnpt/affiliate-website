@@ -105,13 +105,6 @@ const ProductCategories = () => {
                   </span>
                 </div>
 
-                {/* Icon Badge */}
-                <div className="absolute top-3 right-3 z-20 bg-white/95 backdrop-blur-sm p-3 rounded-xl shadow-lg group-hover:bg-[#ff5183] transition-colors">
-                  <i
-                    className={`${category.icon || 'fa-solid fa-box'} text-2xl text-[#ff5183] group-hover:text-white transition-colors`}
-                  ></i>
-                </div>
-
                 {/* Product Count Badge */}
                 <div className="absolute bottom-3 left-3 right-3 z-20">
                   <div className="bg-white/95 backdrop-blur-sm px-4 py-2 rounded-lg shadow-md">
