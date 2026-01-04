@@ -113,6 +113,28 @@ const getById = async (id: number) => {
   }
 };
 
+const getBySlug = async (slug: string) => {
+  try {
+    const { data: product, error } = await supabase
+      .from('products')
+      .select('*, product_categories(*)')
+      .eq('slug', slug)
+      .single();
+
+    if (error) {
+      console.error('Error fetching product by slug:', error);
+      return { message: 'Internal Server Error', error: error.message };
+    }
+
+    return {
+      data: product
+    };
+  } catch (err: any) {
+    console.error('Unexpected error:', err);
+    return { message: 'Internal Server Error', error: err.message };
+  }
+};
+
 const create = async (product: {
   name: string;
   price: number;
@@ -196,6 +218,7 @@ const deleteById = async (id: number) => {
 export const productsService = {
   getList,
   getById,
+  getBySlug,
   create,
   update,
   deleteById,

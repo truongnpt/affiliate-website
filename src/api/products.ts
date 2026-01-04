@@ -18,6 +18,10 @@ const getById = async (id: number) => {
   return await productsService.getById(id);
 };
 
+const getBySlug = async (slug: string) => {
+  return await productsService.getBySlug(slug);
+};
+
 const create = async (product: {
   name: string;
   price: number;
@@ -53,6 +57,7 @@ const deleteById = async (id: number) => {
 export const apiProducts = {
   getList,
   getById,
+  getBySlug,
   create,
   update,
   deleteById,

@@ -22,6 +22,7 @@ export default function CreateProductPage() {
     rating: '0',
     sales: '0',
     description: '',
+    is_buy: false,
   });
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -80,15 +81,16 @@ export default function CreateProductPage() {
       rating: Number(formData.rating) || 0,
       sales: Number(formData.sales) || 0,
       description: formData.description.trim() || undefined,
+      is_buy: formData.is_buy,
     });
   };
 
-  const handleChange = (field: string, value: string) => {
+  const handleChange = (field: string, value: string | boolean) => {
     setFormData(prev => {
       const updated = { ...prev, [field]: value };
       
       // Auto-generate slug from name if name is changed and slug hasn't been manually edited
-      if (field === 'name' && !isSlugManuallyEdited) {
+      if (field === 'name' && !isSlugManuallyEdited && typeof value === 'string') {
         updated.slug = generateSlug(value);
       }
       
@@ -222,7 +224,11 @@ export default function CreateProductPage() {
                 </div>
               </div>
             </div>
+          </div>
+          
 
+          {/* Sidebar */}
+          <div className="space-y-6">
             {/* Image */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Hình ảnh</h2>
@@ -254,10 +260,6 @@ export default function CreateProductPage() {
                 )}
               </div>
             </div>
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
             {/* Pricing */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Giá và Danh mục</h2>
@@ -351,6 +353,34 @@ export default function CreateProductPage() {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent"
                     placeholder="0"
                   />
+                </div>
+              </div>
+            </div>
+
+            {/* Settings */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Cài đặt</h2>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Cho phép mua trực tiếp
+                    </label>
+                    <p className="text-xs text-gray-500">Bật/tắt khả năng mua trực tiếp sản phẩm</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleChange('is_buy', !formData.is_buy)}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#ff5183] focus:ring-offset-2 ${
+                      formData.is_buy ? 'bg-[#ff5183]' : 'bg-gray-300'
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        formData.is_buy ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
+                  </button>
                 </div>
               </div>
             </div>
