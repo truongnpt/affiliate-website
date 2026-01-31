@@ -113,7 +113,7 @@ const Pagination: React.FC<PaginationProps> = ({
               onClick={() => onPageChange(pageNum)}
               className={`px-3 py-2 rounded-lg font-medium transition-colors ${
                 isActive
-                  ? 'bg-[#ff5183] text-white'
+                  ? 'bg-primary text-white'
                   : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
               }`}
               aria-label={`Trang ${pageNum}`}

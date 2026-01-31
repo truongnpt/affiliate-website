@@ -1,12 +1,326 @@
+@import 'tailwindcss';
+
 :root {
-  --background: #ffffff;
-  --primary: #ff5183;
-  --primary-hover: #ff006e;
-  --primary-active: #ff006e;
+  /* Tailwind v4 theme compatibility (--color-*) */
+  --color-primary: #eb7b0b;
+  --color-primary-hover: #f08b19;
+  --color-primary-active: #D97A1F;
+  --color-primary-text: #ffffff;
+  --color-primary-text-hover: #ffffff;
+  --color-primary-text-active: #ffffff;
+  --color-primary-border: #eb7b0b;
+  --color-primary-border-hover: #f08b19;
+  --color-primary-border-active: #eb7b0b;
+  /* App variables - Thực phẩm khô */
+  --background: #FFF8F0;
+  --primary: #eb7b0b;
+  --primary-hover: #f08b19;
+  --primary-active: #eb7b0b;
   --primary-text: #ffffff;
   --primary-text-hover: #ffffff;
   --primary-text-active: #ffffff;
-  --primary-border: #ff5183;
-  --primary-border-hover: #ff006e;
-  --primary-border-active: #ff006e;
+  --primary-border: #eb7b0b;
+  --primary-border-hover: #f08b19;
+  --primary-border-active: #eb7b0b;
+  --secondary: #3A7D44;
+  --accent: #eb7b0b;
+  --title-text: #eb7b0b;
+  --body-text: #333333;
+}
+
+/* Hero section animations */
+@keyframes heroFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFloat {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes heroShine {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes heroScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes heroPulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(235, 123, 11, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 12px rgba(235, 123, 11, 0);
+  }
+}
+
+/* Hero animation utility classes */
+.animate-hero-fade-up {
+  opacity: 0;
+  animation: heroFadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-hero-fade-up-delay-1 {
+  animation-delay: 0.2s;
+}
+
+.animate-hero-fade-up-delay-2 {
+  animation-delay: 0.3s;
+}
+
+.animate-hero-fade-up-delay-3 {
+  animation-delay: 0.5s;
+}
+
+.animate-hero-fade-up-delay-4 {
+  animation-delay: 0.7s;
+}
+
+.animate-hero-fade-up-delay-5 {
+  animation-delay: 0.9s;
+}
+
+.animate-hero-fade-up-delay-6 {
+  animation-delay: 1s;
+}
+
+.animate-hero-fade-up-delay-7 {
+  animation-delay: 1.1s;
+}
+
+.animate-hero-float {
+  animation: heroFloat 4s ease-in-out infinite;
+}
+
+.animate-hero-pulse {
+  animation: heroPulse 2s ease-in-out infinite;
+}
+
+/* Header - Liquid glass effect */
+.header-glass {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow:
+    0 4px 24px -1px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+}
+
+/* Products page - Liquid glass cards */
+.card-glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+}
+
+.card-glass-hover:hover {
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 12px 40px -4px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+}
+
+@keyframes productFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-product-in {
+  opacity: 0;
+  animation: productFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Add to cart button animations */
+@keyframes addToCartClick {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.97);
+  }
+}
+
+@keyframes addToCartSuccess {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 20px 25px -5px rgba(34, 197, 94, 0.25), 0 8px 10px -6px rgba(34, 197, 94, 0.2);
+  }
+
+  100% {
+    transform: scale(1);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+}
+
+@keyframes addToCartCheckmark {
+  0% {
+    transform: scale(0) rotate(-45deg);
+    opacity: 0;
+  }
+
+  60% {
+    transform: scale(1.15) rotate(5deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes addToCartSuccessRing {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.animate-add-to-cart-click {
+  animation: addToCartClick 0.25s ease-out;
+}
+
+.animate-add-to-cart-success {
+  animation: addToCartSuccess 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.animate-add-to-cart-checkmark {
+  animation: addToCartCheckmark 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-add-to-cart-text {
+  opacity: 0;
+  animation: addToCartCheckmark 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) 0.08s forwards;
+}
+
+.mobile-menu-glass {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-left: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.08);
+  border-radius: 24px 0 0 24px;
+}
+
+/* Toast notifications */
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes toastOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes toastProgress {
+  from {
+    width: 100%;
+  }
+
+  to {
+    width: 0%;
+  }
+}
+
+.animate-toast-in {
+  animation: toastIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-toast-out {
+  animation: toastOut 0.3s ease-in forwards;
+}
+
+.animate-toast-progress {
+  transform-origin: left;
+  animation: toastProgress linear forwards;
+}
+
+button:not([disabled]) {
+  cursor: pointer;
+}
+
+@theme {
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+  --color-primary-text: var(--primary-text);
+  --color-primary-text-hover: var(--primary-text-hover);
+  --color-primary-text-active: var(--primary-text-active);
+  --color-primary-border: var(--primary-border);
+  --color-primary-border-hover: var(--primary-border-hover);
+  --color-primary-border-active: var(--primary-border-active);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-background: var(--background);
+  --color-title-text: var(--title-text);
+  --color-body-text: var(--body-text);
 }

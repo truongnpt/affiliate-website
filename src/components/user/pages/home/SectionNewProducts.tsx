@@ -2,9 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ProductCard from '../products/ProductCard';
+import AddToCartModal, { type AddToCartModalProduct } from '../products/AddToCartModal';
 import { apiProducts } from '../../../../api/products';
 
 const SectionNewProducts = () => {
+  const [selectedProductForModal, setSelectedProductForModal] =
+    useState<AddToCartModalProduct | null>(null);
   // Fetch new products
   const { data: productsData, isLoading } = useQuery({
     queryKey: ['new_products'],
@@ -57,7 +60,7 @@ const SectionNewProducts = () => {
       <section id="new-product" className="py-10 sm:py-16 lg:py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#ff5183] border-t-transparent"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
           </div>
         </div>
       </section>
@@ -86,14 +89,14 @@ const SectionNewProducts = () => {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 sm:mb-12">
           <div className="mb-4 sm:mb-0">
             <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-              <i className="fa-brands fa-tiktok text-2xl sm:text-3xl text-[#ff5183]"></i>
+              <i className="fa-solid fa-seedling text-2xl sm:text-3xl text-primary"></i>
               <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 flex items-center">
-                <span className="bg-[#ff5183] w-1.5 sm:w-2 h-6 sm:h-8 mr-2 sm:mr-3 rounded-full"></span>
-                <span className="leading-tight">Sản phẩm hot TikTok Shop</span>
+                <span className="bg-primary w-1.5 sm:w-2 h-6 sm:h-8 mr-2 sm:mr-3 rounded-full"></span>
+                <span className="leading-tight">Sản phẩm thực phẩm khô mới</span>
               </h2>
             </div>
             <p className="text-sm sm:text-base lg:text-xl text-gray-600 mb-2">
-              Click vào link để tự động thêm vào giỏ hàng TikTok Shop ngay!
+              Thêm vào giỏ hàng và mua ngay!
             </p>
             <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500">
               <span className="flex items-center gap-1">
@@ -110,14 +113,14 @@ const SectionNewProducts = () => {
           <div className="hidden md:flex items-center space-x-2">
             <button
               onClick={prevSlide}
-              className="w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-[#ff5183] hover:text-white hover:border-[#ff5183] transition-colors shadow-sm"
+              className="w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-colors shadow-sm"
               aria-label="Previous"
             >
               <i className="fa-solid fa-chevron-left"></i>
             </button>
             <button
               onClick={nextSlide}
-              className="w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-[#ff5183] hover:text-white hover:border-[#ff5183] transition-colors shadow-sm"
+              className="w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-colors shadow-sm"
               aria-label="Next"
             >
               <i className="fa-solid fa-chevron-right"></i>
@@ -142,7 +145,10 @@ const SectionNewProducts = () => {
                   minWidth: `${100 / itemsPerPage}%`,
                 }}
               >
-                <ProductCard product={product} />
+                <ProductCard
+                  product={product}
+                  onAddToCart={(p) => setSelectedProductForModal(p)}
+                />
               </div>
             ))}
           </div>
@@ -152,7 +158,7 @@ const SectionNewProducts = () => {
         <div className="flex md:hidden justify-center items-center space-x-2 mt-6 sm:mt-8">
           <button
             onClick={prevSlide}
-            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-[#ff5183] hover:text-white hover:border-[#ff5183] active:bg-[#ff5183] active:text-white transition-colors shadow-sm"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary active:bg-primary active:text-white transition-colors shadow-sm"
             aria-label="Previous"
           >
             <i className="fa-solid fa-chevron-left text-sm"></i>
@@ -165,7 +171,7 @@ const SectionNewProducts = () => {
                 onClick={() => setCurrentIndex(index)}
                 className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
                   index === currentIndex
-                    ? 'bg-[#ff5183] w-6 sm:w-8'
+                    ? 'bg-primary w-6 sm:w-8'
                     : 'bg-gray-300 hover:bg-gray-400 w-1.5 sm:w-2'
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
@@ -174,7 +180,7 @@ const SectionNewProducts = () => {
           </div>
           <button
             onClick={nextSlide}
-            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-[#ff5183] hover:text-white hover:border-[#ff5183] active:bg-[#ff5183] active:text-white transition-colors shadow-sm"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary active:bg-primary active:text-white transition-colors shadow-sm"
             aria-label="Next"
           >
             <i className="fa-solid fa-chevron-right text-sm"></i>
@@ -185,13 +191,22 @@ const SectionNewProducts = () => {
         <div className="text-center mt-8 sm:mt-10 lg:mt-12">
           <a
             href="/products"
-            className="inline-flex items-center text-sm sm:text-base text-[#ff5183] font-semibold hover:text-[#ff5183]/80 transition-colors"
+            className="inline-flex items-center text-sm sm:text-base text-primary font-semibold hover:text-primary/80 transition-colors"
           >
             Xem tất cả sản phẩm
             <i className="fa-solid fa-arrow-right ml-2"></i>
           </a>
         </div>
       </div>
+
+      {/* Một modal Thêm giỏ hàng ngoài vòng lặp */}
+      {selectedProductForModal && (
+        <AddToCartModal
+          product={selectedProductForModal}
+          isOpen={!!selectedProductForModal}
+          onClose={() => setSelectedProductForModal(null)}
+        />
+      )}
     </section>
   );
 };

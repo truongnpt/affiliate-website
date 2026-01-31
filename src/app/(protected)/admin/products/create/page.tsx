@@ -62,7 +62,7 @@ export default function CreateProductPage() {
     }
     if (!formData.category_id) newErrors.category_id = 'Danh mục là bắt buộc';
     if (!formData.image.trim()) newErrors.image = 'Hình ảnh là bắt buộc';
-    if (!formData.url.trim()) newErrors.url = 'Link TikTok Shop là bắt buộc';
+    if (!formData.url.trim()) newErrors.url = 'Link sản phẩm là bắt buộc';
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -148,7 +148,7 @@ export default function CreateProductPage() {
                     type="text"
                     value={formData.name}
                     onChange={(e) => handleChange('name', e.target.value)}
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent ${
                       errors.name ? 'border-red-500' : 'border-gray-300'
                     }`}
                     placeholder="Nhập tên sản phẩm"
@@ -165,14 +165,14 @@ export default function CreateProductPage() {
                       type="text"
                       value={formData.slug}
                       onChange={(e) => handleChange('slug', e.target.value)}
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent"
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent"
                       placeholder="slug-tu-dong-tao"
                     />
                     <button
                       type="button"
                       onClick={handleGenerateSlug}
                       disabled={!formData.name.trim()}
-                      className="px-4 py-2 bg-[#ff5183] text-white rounded-lg hover:bg-[#ff006e] disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500 transition-colors"
+                      className="px-4 py-2 bg-[primary] text-white rounded-lg hover:bg-primary-hover disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500 transition-colors"
                       title="Tạo slug từ tên sản phẩm"
                     >
                       <i className="fas fa-magic"></i>
@@ -189,7 +189,7 @@ export default function CreateProductPage() {
                     value={formData.excerpt}
                     onChange={(e) => handleChange('excerpt', e.target.value)}
                     rows={3}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent"
                     placeholder="Nhập tóm tắt ngắn gọn về sản phẩm"
                   />
                 </div>
@@ -202,20 +202,20 @@ export default function CreateProductPage() {
                     value={formData.description}
                     onChange={(e) => handleChange('description', e.target.value)}
                     rows={4}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent"
                     placeholder="Nhập mô tả sản phẩm"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Link TikTok Shop <span className="text-red-500">*</span>
+                    Link sản phẩm <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="url"
                     value={formData.url}
                     onChange={(e) => handleChange('url', e.target.value)}
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent ${
                       errors.url ? 'border-red-500' : 'border-gray-300'
                     }`}
                     placeholder="https://..."
@@ -240,7 +240,7 @@ export default function CreateProductPage() {
                   type="url"
                   value={formData.image}
                   onChange={(e) => handleChange('image', e.target.value)}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent ${
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent ${
                     errors.image ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="https://..."
@@ -273,7 +273,7 @@ export default function CreateProductPage() {
                     value={formData.price}
                     onChange={(e) => handleChange('price', e.target.value)}
                     min="0"
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent ${
                       errors.price ? 'border-red-500' : 'border-gray-300'
                     }`}
                     placeholder="0"
@@ -291,7 +291,7 @@ export default function CreateProductPage() {
                     onChange={(e) => handleChange('discount', e.target.value)}
                     min="0"
                     max="100"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent"
                     placeholder="0"
                   />
                 </div>
@@ -303,7 +303,7 @@ export default function CreateProductPage() {
                   <select
                     value={formData.category_id}
                     onChange={(e) => handleChange('category_id', e.target.value)}
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent ${
                       errors.category_id ? 'border-red-500' : 'border-gray-300'
                     }`}
                   >
@@ -336,7 +336,7 @@ export default function CreateProductPage() {
                     min="0"
                     max="5"
                     step="0.1"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent"
                     placeholder="0"
                   />
                 </div>
@@ -350,7 +350,7 @@ export default function CreateProductPage() {
                     value={formData.sales}
                     onChange={(e) => handleChange('sales', e.target.value)}
                     min="0"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent"
                     placeholder="0"
                   />
                 </div>
@@ -371,8 +371,8 @@ export default function CreateProductPage() {
                   <button
                     type="button"
                     onClick={() => handleChange('is_buy', !formData.is_buy)}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#ff5183] focus:ring-offset-2 ${
-                      formData.is_buy ? 'bg-[#ff5183]' : 'bg-gray-300'
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[primary] focus:ring-offset-2 ${
+                      formData.is_buy ? 'bg-[primary]' : 'bg-gray-300'
                     }`}
                   >
                     <span

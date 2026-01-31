@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
+import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { apiAuth } from '@/api/auth';
@@ -14,14 +15,31 @@ interface MenuItem {
   path: string;
 }
 
-const menuItems: MenuItem[] = [
-  { id: 'dashboard', label: 'Dashboard', icon: 'fa-home', path: '/dashboard' },
-  { id: 'product-categories', label: 'Product Categories', icon: 'fa-list', path: '/admin/product-categories' },
-  { id: 'products', label: 'Products', icon: 'fa-box', path: '/admin/products' },
-  { id: 'orders', label: 'Orders', icon: 'fa-shopping-cart', path: '/admin/orders' },
-  { id: 'affiliates', label: 'Affiliates', icon: 'fa-users', path: '/admin/affiliates' },
-  { id: 'analytics', label: 'Analytics', icon: 'fa-chart-line', path: '/admin/analytics' },
-  { id: 'settings', label: 'Settings', icon: 'fa-cog', path: '/admin/settings' },
+interface MenuSection {
+  title?: string;
+  items: MenuItem[];
+}
+
+const menuSections: MenuSection[] = [
+  {
+    items: [{ id: 'dashboard', label: 'Tổng quan', icon: 'fa-home', path: '/dashboard' }],
+  },
+  {
+    title: 'Quản lý',
+    items: [
+      { id: 'product-categories', label: 'Danh mục', icon: 'fa-folder-tree', path: '/admin/product-categories' },
+      { id: 'products', label: 'Sản phẩm', icon: 'fa-box', path: '/admin/products' },
+      { id: 'orders', label: 'Đơn hàng', icon: 'fa-shopping-cart', path: '/admin/orders' },
+    ],
+  },
+  {
+    title: 'Khác',
+    items: [
+      { id: 'affiliates', label: 'Affiliates', icon: 'fa-users', path: '/admin/affiliates' },
+      { id: 'analytics', label: 'Thống kê', icon: 'fa-chart-line', path: '/admin/analytics' },
+      { id: 'settings', label: 'Cài đặt', icon: 'fa-cog', path: '/admin/settings' },
+    ],
+  },
 ];
 
 export default function DashboardLayout({
@@ -91,7 +109,7 @@ export default function DashboardLayout({
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#ff5183]"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
           <p className="mt-4 text-gray-600">Đang kiểm tra quyền truy cập...</p>
         </div>
       </div>
@@ -109,24 +127,34 @@ export default function DashboardLayout({
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
       <aside
-        className={`${
-          sidebarOpen ? 'w-64 translate-x-0' : '-translate-x-full lg:translate-x-0'
-        } ${
-          sidebarOpen ? 'lg:w-64' : 'lg:w-20'
-        } bg-white shadow-lg border-r border-gray-200 transition-all duration-300 ease-in-out fixed h-screen z-30 flex flex-col`}
+        className={`${sidebarOpen ? 'w-64 translate-x-0' : '-translate-x-full lg:translate-x-0'
+          } ${sidebarOpen ? 'lg:w-64' : 'lg:w-20'
+          } bg-white shadow-lg border-r border-gray-200 transition-all duration-300 ease-in-out fixed h-screen z-30 flex flex-col`}
       >
         {/* Logo */}
-        <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200 bg-gradient-to-r from-[#ff5183] to-[#ff5183]/90">
+        <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200 bg-gradient-to-r from-primary to-primary/90">
           {sidebarOpen ? (
-            <div className="flex items-center space-x-3">
-              <div className="h-10 w-10 bg-white rounded-lg flex items-center justify-center">
-                <i className="fa-brands fa-tiktok text-[#ff5183] text-xl"></i>
+            <div className="flex items-center space-x-2 min-w-0 flex-1">
+              <div className="h-10 w-10 bg-white rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                <Image
+                  src={appConfig.logo}
+                  alt={appConfig.name}
+                  width={40}
+                  height={40}
+                  className="w-full h-full object-contain"
+                />
               </div>
-              <span className="text-white font-bold text-lg">{appConfig.name}</span>
+              <span className="text-white font-bold text-lg truncate">{appConfig.name}</span>
             </div>
           ) : (
-            <div className="h-10 w-10 bg-white rounded-lg flex items-center justify-center mx-auto">
-              <i className="fa-brands fa-tiktok text-[#ff5183] text-xl"></i>
+            <div className="h-10 w-10 bg-white rounded-lg flex items-center justify-center mx-auto overflow-hidden flex-shrink-0">
+              <Image
+                src={appConfig.logo}
+                alt={appConfig.name}
+                width={40}
+                height={40}
+                className="w-full h-full object-contain"
+              />
             </div>
           )}
           <button
@@ -139,48 +167,59 @@ export default function DashboardLayout({
 
         {/* Navigation Menu */}
         <nav className="flex-1 overflow-y-auto py-4 px-3">
-          <ul className="space-y-1">
-            {menuItems.map((item) => {
-              const active = isActive(item.path);
-              return (
-                <li key={item.id}>
-                  <button
-                    onClick={() => {
-                      router.push(item.path);
-                      // Close sidebar on mobile after navigation
-                      if (window.innerWidth < 1024) {
-                        setSidebarOpen(false);
-                      }
-                    }}
-                    className={`w-full flex items-center ${
-                      sidebarOpen ? 'justify-start px-4' : 'justify-center px-2'
-                    } py-3 rounded-lg transition-all duration-200 group ${
-                      active
-                        ? 'bg-[#ff5183] text-white shadow-md'
-                        : 'text-gray-700 hover:bg-gray-100 hover:text-[#ff5183]'
-                    }`}
-                    title={!sidebarOpen ? item.label : ''}
-                  >
-                    <i
-                      className={`fas ${item.icon} ${
-                        sidebarOpen ? 'mr-3' : 'mr-0'
-                      } text-lg ${active ? 'text-white' : 'text-gray-500 group-hover:text-[#ff5183]'}`}
-                    ></i>
-                    {sidebarOpen && (
-                      <span className="font-medium">{item.label}</span>
-                    )}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+          {menuSections.map((section, sectionIdx) => (
+            <div key={sectionIdx} className={sectionIdx > 0 ? 'mt-6' : ''}>
+              {section.title && sidebarOpen && (
+                <p className="px-4 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  {section.title}
+                </p>
+              )}
+              <ul className="space-y-1">
+                {section.items.map((item) => {
+                  const active = isActive(item.path);
+                  return (
+                    <li key={item.id}>
+                      <button
+                        onClick={() => {
+                          router.push(item.path);
+                          if (window.innerWidth < 1024) setSidebarOpen(false);
+                        }}
+                        className={`group relative w-full flex items-center ${sidebarOpen ? 'justify-start px-4' : 'justify-center px-2'
+                          } py-2.5 rounded-xl transition-all duration-200 ${active
+                            ? 'bg-primary/10 text-primary'
+                            : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                          }`}
+                        title={!sidebarOpen ? item.label : ''}
+                      >
+                        {/* Active indicator */}
+                        {active && (
+                          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full" />
+                        )}
+                        <span
+                          className={`flex items-center justify-center w-9 h-9 rounded-lg flex-shrink-0 transition-colors ${active ? 'bg-primary text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-primary/10 group-hover:text-primary'
+                            }`}
+                        >
+                          <i className={`fas ${item.icon} text-sm`} />
+                        </span>
+                        {sidebarOpen && (
+                          <span className={`ml-3 font-medium ${active ? 'text-primary' : 'text-gray-700 group-hover:text-gray-900'}`}>
+                            {item.label}
+                          </span>
+                        )}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
         </nav>
 
         {/* User Info (Optional) */}
         {sidebarOpen && (
           <div className="p-4 border-t border-gray-200">
             <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-              <div className="h-10 w-10 bg-[#ff5183] rounded-full flex items-center justify-center">
+              <div className="h-10 w-10 bg-primary rounded-full flex items-center justify-center">
                 <i className="fas fa-user text-white"></i>
               </div>
               <div className="flex-1 min-w-0">
@@ -195,47 +234,79 @@ export default function DashboardLayout({
       {/* Main Content Area */}
       <div className={`flex-1 max-w-[calc(100%-16rem)] ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-20'} transition-all duration-300`}>
         {/* Top Header */}
-        <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-20">
-          <div className="px-4 sm:px-6 py-4">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center space-x-4">
-                {/* Mobile Menu Button */}
+        <header className="bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-200/80 sticky top-0 z-20">
+          <div className="px-4 sm:px-6 lg:px-8 h-16">
+            <div className="flex justify-between items-center h-full gap-4">
+              {/* Left: Menu toggle + Search */}
+              <div className="flex items-center gap-3 flex-1 min-w-0">
                 <button
                   onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="lg:hidden p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="lg:hidden flex-shrink-0 p-2.5 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-xl transition-colors"
+                  aria-label="Mở menu"
                 >
                   <i className="fas fa-bars text-lg"></i>
                 </button>
-                <div className="flex items-center space-x-2 relative">
-                  <input type="text" placeholder="Tìm kiếm" className="w-full p-2 rounded-lg border border-gray-300" />
-                  <i className="fas fa-search absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                <div className="hidden sm:block flex-1 max-w-md">
+                  <div className="relative">
+                    <i className="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                    <input
+                      type="text"
+                      placeholder="Tìm kiếm..."
+                      className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors placeholder:text-gray-400"
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="flex items-center space-x-4">
+
+              {/* Right: User + Actions */}
+              <div className="flex items-center gap-2">
+                {/* Link to store */}
+                <a
+                  href="/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hidden md:flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-100 rounded-xl transition-colors"
+                  title="Xem trang bán hàng"
+                >
+                  <i className="fas fa-external-link-alt text-xs"></i>
+                  <span>Trang bán hàng</span>
+                </a>
+
                 {/* Notifications */}
-                <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
+                <button
+                  className="relative p-2.5 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-xl transition-colors"
+                  title="Thông báo"
+                  aria-label="Thông báo"
+                >
                   <i className="fas fa-bell text-lg"></i>
-                  <span className="absolute top-1 right-1 h-2 w-2 bg-[#ff5183] rounded-full"></span>
+                  <span className="absolute top-1.5 right-1.5 h-2 w-2 bg-amber-500 rounded-full ring-2 ring-white"></span>
                 </button>
 
-                {/* Logout Button */}
-                <button
-                  onClick={() => logout()}
-                  disabled={isLoadingLogout}
-                  className="flex items-center space-x-2 px-4 py-2 bg-[#ff5183] text-white rounded-lg hover:bg-[#ff5183]/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isLoadingLogout ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
-                      <span>Đang xử lý...</span>
-                    </>
-                  ) : (
-                    <>
+                {/* User profile + Logout */}
+                <div className="flex items-center gap-2 pl-2 border-l border-gray-200">
+                  <div className="hidden sm:flex flex-col items-end">
+                    <span className="text-sm font-medium text-gray-900 truncate max-w-[120px]">
+                      {user?.full_name || 'Admin'}
+                    </span>
+                    <span className="text-xs text-gray-500">{getUserRole}</span>
+                  </div>
+                  <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <i className="fas fa-user text-primary"></i>
+                  </div>
+                  <button
+                    onClick={() => logout()}
+                    disabled={isLoadingLogout}
+                    className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    title="Đăng xuất"
+                  >
+                    {isLoadingLogout ? (
+                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-300 border-t-primary"></div>
+                    ) : (
                       <i className="fas fa-sign-out-alt"></i>
-                      <span>Đăng xuất</span>
-                    </>
-                  )}
-                </button>
+                    )}
+                    <span className="hidden sm:inline">Đăng xuất</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -251,9 +322,8 @@ export default function DashboardLayout({
 
       {/* Mobile Overlay */}
       <div
-        className={`fixed inset-0 bg-black/50 z-20 lg:hidden transition-opacity duration-300 ${
-          sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
+        className={`fixed inset-0 bg-black/50 z-20 lg:hidden transition-opacity duration-300 ${sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
         onClick={() => setSidebarOpen(false)}
       ></div>
     </div>

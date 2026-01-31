@@ -1,20 +1,22 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiProducts } from '@/api/products';
 import { apiProductCategories } from '@/api/product-categories';
-import Button from '@/components/ui/Button';
 import Table, { TableColumn } from '@/components/ui/Table';
+import ModalConfirm from '@/components/ui/ModalConfirm';
+import { useToast } from '@/store/toast';
 import Link from 'next/link';
 
 export default function ProductsListPage() {
-  const router = useRouter();
   const queryClient = useQueryClient();
+  const { showToast } = useToast();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<number | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<{ id: number; name: string } | null>(null);
   const limit = 10;
 
   // Fetch products
@@ -38,10 +40,24 @@ export default function ProductsListPage() {
   });
 
   // Delete mutation
-  const { mutate: deleteProduct, isPending: isDeleting } = useMutation({
+  const { mutate: deleteProduct } = useMutation({
     mutationFn: (id: number) => apiProducts.deleteById(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-products'] });
+    onMutate: (id) => setDeletingId(id),
+    onSettled: () => {
+      setDeletingId(null);
+      setDeleteTarget(null);
+    },
+    onSuccess: (result) => {
+      if ((result as { success?: boolean }).success) {
+        queryClient.invalidateQueries({ queryKey: ['admin-products'] });
+        showToast('Đã xóa sản phẩm thành công', { variant: 'success', title: 'Thành công' });
+      } else {
+        const err = result as { message?: string; error?: string };
+        showToast(err?.message || err?.error || 'Không thể xóa sản phẩm', {
+          variant: 'error',
+          title: 'Lỗi',
+        });
+      }
     },
   });
 
@@ -50,9 +66,13 @@ export default function ProductsListPage() {
   const totalPages = productsData?.totalPages || 1;
   const categories = categoriesData?.data || [];
 
-  const handleDelete = (id: number, name: string) => {
-    if (confirm(`Bạn có chắc chắn muốn xóa sản phẩm "${name}"?`)) {
-      deleteProduct(id);
+  const handleDeleteClick = (id: number, name: string) => {
+    setDeleteTarget({ id, name });
+  };
+
+  const handleConfirmDelete = () => {
+    if (deleteTarget) {
+      deleteProduct(deleteTarget.id);
     }
   };
 
@@ -147,21 +167,27 @@ export default function ProductsListPage() {
             title="Xem chi tiết"
           >
             <i className="fas fa-eye"></i>
-            </Link>
-            <Link 
+          </Link>
+          <Link
             href={`/admin/products/${row.id}/edit`}
             className="text-green-600 hover:text-green-900 p-2 hover:bg-green-50 rounded-lg transition-colors"
             title="Chỉnh sửa"
           >
             <i className="fas fa-edit"></i>
           </Link>
-          <Link
-            href={`/admin/products/${row.id}`}
-            className="text-red-600 hover:text-red-900 p-2 hover:bg-red-50 rounded-lg transition-colors"
+          <button
+            type="button"
+            onClick={() => handleDeleteClick(row.id, row.name)}
+            disabled={deletingId === row.id}
+            className="text-red-600 hover:text-red-900 p-2 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             title="Xóa"
           >
-            <i className="fas fa-trash"></i>
-            </Link>
+            {deletingId === row.id ? (
+              <i className="fas fa-spinner fa-spin"></i>
+            ) : (
+              <i className="fas fa-trash"></i>
+            )}
+          </button>
         </div>
       ),
     },
@@ -177,11 +203,11 @@ export default function ProductsListPage() {
         </div>
         <Link
           href="/admin/products/create"
-          className="bg-[#ff5183] text-white px-4 py-2 rounded-md hover:bg-[#ff5183]/80 transition-colors flex items-center space-x-2"
+          className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/80 transition-colors flex items-center space-x-2"
         >
           <i className="fas fa-plus"></i>
           <span>Thêm sản phẩm mới</span>
-        </Link>  
+        </Link>
       </div>
 
       {/* Filters */}
@@ -200,7 +226,7 @@ export default function ProductsListPage() {
                   setPage(1);
                 }}
                 placeholder="Tên sản phẩm..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
               />
               <i className="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
             </div>
@@ -215,7 +241,7 @@ export default function ProductsListPage() {
                 setCategoryFilter(e.target.value ? Number(e.target.value) : null);
                 setPage(1);
               }}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
             >
               <option value="">Tất cả danh mục</option>
               {categories.map((cat: any) => (
@@ -227,6 +253,29 @@ export default function ProductsListPage() {
           </div>
         </div>
       </div>
+
+      {/* Delete Confirm Modal */}
+      <ModalConfirm
+        open={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={handleConfirmDelete}
+        title="Xác nhận xóa sản phẩm"
+        message={
+          deleteTarget ? (
+            <>
+              Bạn có chắc chắn muốn xóa sản phẩm{' '}
+              <span className="font-semibold text-gray-900">&quot;{deleteTarget.name}&quot;</span>?
+              Hành động này không thể hoàn tác.
+            </>
+          ) : (
+            ''
+          )
+        }
+        confirmText="Xóa"
+        cancelText="Hủy"
+        loading={!!deletingId}
+        variant="danger"
+      />
 
       {/* Products Table */}
       <Table

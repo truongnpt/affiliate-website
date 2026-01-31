@@ -52,7 +52,7 @@ export default function Table<T = any>({
     return (
       <div className={`bg-white rounded-lg shadow-sm border border-gray-200 ${className}`}>
         <div className="p-12 text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#ff5183]"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
           <p className="mt-4 text-gray-600">Đang tải...</p>
         </div>
       </div>

@@ -3,90 +3,77 @@ import React from 'react';
 
 const About = () => {
   return (
-    <main className="bg-white min-h-screen">
-      {/* Hero Section */}
-      <section className="relative bg-gray-900 h-[600px] flex items-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img
-            src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&auto=format&fit=crop&q=80"
-            alt="Background"
-            className="w-full h-full object-cover opacity-20"
-          />
-        </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <i className="fa-brands fa-tiktok text-5xl text-[#ff5183]"></i>
-            <h1 className="text-4xl lg:text-6xl font-bold text-white">
-              Về <span className="text-[#ff5183]">NờPêTê TikTok Shop</span>
-            </h1>
+    <main className="min-h-screen bg-gradient-to-b from-gray-50/80 via-white to-gray-50/50">
+
+
+      {/* Hero - Liquid glass overlay */}
+      <section className="relative h-[480px] sm:h-[560px] flex items-center overflow-hidden">
+        <img
+          src="/images/about-banner.png"
+          alt="Thực phẩm khô"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full">
+          <div className="card-glass rounded-3xl p-8 sm:p-10 max-w-3xl mx-auto inline-block">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <i className="fa-solid fa-seedling text-4xl sm:text-5xl text-primary" />
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
+                Về <span className="text-primary">Thế Giới KHÔ</span>
+              </h1>
+            </div>
+            <p className="text-lg sm:text-xl text-gray-200 max-w-2xl mx-auto leading-relaxed">
+              Chuyên thực phẩm khô chất lượng: hạt dinh dưỡng, các loại khô, trái cây sấy. Thêm vào giỏ hàng và mua hàng đơn giản.
+            </p>
           </div>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Nơi cung cấp link sản phẩm TikTok Shop chính thức. Click vào link để
-            tự động thêm vào giỏ hàng và mua ngay với giá tốt nhất!
-          </p>
         </div>
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-20">
+      <section className="py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div className="relative">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl transform rotate-3 hover:rotate-0 transition-all duration-500">
+              <div className="card-glass card-glass-hover rounded-2xl overflow-hidden transition-all duration-500">
                 <img
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop&q=60"
-                  alt="Our Team"
-                  className="w-full"
+                  src="https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=800&auto=format&fit=crop&q=60"
+                  alt="Thực phẩm khô"
+                  className="w-full h-auto"
                 />
               </div>
-              <div className="absolute -bottom-10 -left-10 bg-[#ff5183] text-white p-8 rounded-xl hidden lg:block shadow-xl">
-                <p className="text-4xl font-bold mb-1">5+</p>
-                <p className="text-sm uppercase tracking-wider">
-                  Năm kinh nghiệm
-                </p>
+              <div className="absolute -bottom-6 -left-6 card-glass rounded-2xl p-6 shadow-xl hidden lg:block">
+                <p className="text-3xl font-bold text-primary mb-1">5+</p>
+                <p className="text-sm uppercase tracking-wider text-gray-600 font-medium">Năm kinh nghiệm</p>
               </div>
             </div>
 
             <div>
-              <h4 className="text-[#ff5183] font-bold uppercase tracking-widest mb-2">
-                Về NờPêTê TikTok Shop
-              </h4>
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
-                Mua sắm dễ dàng với TikTok Shop - Chỉ cần click và mua
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-4">
+                <span className="text-sm font-semibold text-primary">Về Thế Giới KHÔ</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
+                Thực phẩm khô chất lượng – Thêm giỏ hàng & mua ngay
               </h2>
               <p className="text-gray-600 mb-6 leading-relaxed">
-                Chào mừng bạn đến với NờPêTê TikTok Shop! Đây là nơi tôi tập hợp
-                và chia sẻ những sản phẩm chất lượng từ TikTok Shop. Tất cả các
-                sản phẩm đều được tôi chọn lọc kỹ lưỡng từ kênh TikTok của mình
-                để đảm bảo chất lượng tốt nhất cho bạn.
+                Chào mừng bạn đến với Thế Giới KHÔ! Chúng tôi chuyên cung cấp hạt dinh dưỡng, các loại khô, trái cây sấy với chất lượng đảm bảo. Mọi sản phẩm đều được chọn lọc và đóng gói cẩn thận.
               </p>
               <p className="text-gray-600 mb-8 leading-relaxed">
-                Với một click duy nhất vào link sản phẩm, bạn sẽ được tự động
-                chuyển đến TikTok Shop và sản phẩm sẽ được thêm vào giỏ hàng.
-                Quá trình mua sắm trở nên nhanh chóng, tiện lợi và an toàn 100%
-                vì tất cả đều là link chính thức từ TikTok Shop.
+                Bạn chỉ cần chọn sản phẩm, thêm vào giỏ hàng và thanh toán. Quy trình mua hàng đơn giản, giao hàng nhanh chóng và an toàn.
               </p>
-
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="border-l-4 border-[#ff5183] pl-4">
-                  <h5 className="font-bold text-gray-900 mb-1 flex items-center gap-2">
-                    <i className="fa-brands fa-tiktok text-[#ff5183]"></i>
+                <div className="card-glass rounded-2xl p-5 border-l-4 border-primary">
+                  <h5 className="font-bold text-gray-900 mb-2 flex items-center gap-2">
+                    <i className="fa-solid fa-seedling text-primary" />
                     Mục tiêu
                   </h5>
-                  <p className="text-sm text-gray-600">
-                    Giúp bạn tìm và mua những sản phẩm tốt nhất từ TikTok Shop
-                    một cách dễ dàng và nhanh chóng nhất.
-                  </p>
+                  <p className="text-sm text-gray-600">Mang thực phẩm khô chất lượng đến mọi gia đình với giá hợp lý.</p>
                 </div>
-                <div className="border-l-4 border-[#ff5183] pl-4">
-                  <h5 className="font-bold text-gray-900 mb-1 flex items-center gap-2">
-                    <i className="fa-solid fa-handshake text-[#ff5183]"></i>
+                <div className="card-glass rounded-2xl p-5 border-l-4 border-primary">
+                  <h5 className="font-bold text-gray-900 mb-2 flex items-center gap-2">
+                    <i className="fa-solid fa-handshake text-primary" />
                     Cam kết
                   </h5>
-                  <p className="text-sm text-gray-600">
-                    100% link chính thức TikTok Shop, an toàn, uy tín và hỗ trợ
-                    bạn mua sắm tốt nhất.
-                  </p>
+                  <p className="text-sm text-gray-600">Chất lượng, an toàn thực phẩm và giao hàng đúng hẹn.</p>
                 </div>
               </div>
             </div>
@@ -94,229 +81,77 @@ const About = () => {
         </div>
       </section>
 
-      {/* Stats Counter */}
-      <section className="bg-gradient-to-r from-[#ff5183] to-[#ff006e] py-20 text-white">
+      {/* Stats */}
+      <section className="py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h3 className="text-2xl font-bold mb-2">NờPêTê TikTok Shop</h3>
-            <p className="text-white/90">Nơi mua sắm đáng tin cậy</p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-4xl lg:text-5xl font-bold mb-2">100%</div>
-              <div className="text-white/90 text-sm lg:text-base">
-                Link TikTok Shop chính thức
-              </div>
+          <div className="card-glass rounded-3xl p-8 sm:p-12">
+            <div className="text-center mb-10">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Thế Giới KHÔ</h3>
+              <p className="text-gray-600">Thực phẩm khô đáng tin cậy</p>
             </div>
-            <div>
-              <div className="text-4xl lg:text-5xl font-bold mb-2">1 Click</div>
-              <div className="text-white/90 text-sm lg:text-base">
-                Thêm vào giỏ hàng ngay
-              </div>
-            </div>
-            <div>
-              <div className="text-4xl lg:text-5xl font-bold mb-2">24/7</div>
-              <div className="text-white/90 text-sm lg:text-base">
-                Cập nhật sản phẩm mới
-              </div>
-            </div>
-            <div>
-              <div className="text-4xl lg:text-5xl font-bold mb-2">100%</div>
-              <div className="text-white/90 text-sm lg:text-base">
-                An toàn & Bảo mật
-              </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              {[
+                { value: '100%', label: 'Chất lượng' },
+                { value: '1 Click', label: 'Thêm giỏ hàng' },
+                { value: '24/7', label: 'Cập nhật sản phẩm' },
+                { value: '100%', label: 'An toàn & Bảo mật' },
+              ].map((item) => (
+                <div key={item.label}>
+                  <div className="text-3xl lg:text-4xl font-bold text-primary mb-2">{item.value}</div>
+                  <div className="text-gray-600 text-sm lg:text-base">{item.label}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
       {/* Core Values */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Tại sao chọn NờPêTê TikTok Shop?
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Những lý do khiến bạn nên tin tưởng và sử dụng website của chúng
-              tôi để mua sắm.
-            </p>
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Tại sao chọn Thế Giới KHÔ?</h2>
+            <p className="text-gray-600 max-w-xl mx-auto">Những lý do bạn có thể tin tưởng khi mua thực phẩm khô tại chúng tôi.</p>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-shadow border border-gray-100">
-              <div className="w-14 h-14 bg-[#ff5183]/10 rounded-xl flex items-center justify-center text-[#ff5183] text-2xl mb-6">
-                <i className="fa-solid fa-shield-halved"></i>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { icon: 'fa-solid fa-seedling', title: 'Thực phẩm khô chất lượng', desc: 'Sản phẩm được chọn lọc, đóng gói đảm bảo vệ sinh và an toàn thực phẩm.' },
+              { icon: 'fa-solid fa-cart-shopping', title: 'Thêm giỏ hàng & mua đơn giản', desc: 'Chọn sản phẩm, thêm vào giỏ hàng và thanh toán. Quy trình nhanh chóng, dễ dàng.' },
+              { icon: 'fa-solid fa-star', title: 'Giao hàng tận nơi', desc: 'Đóng gói cẩn thận, giao hàng nhanh. Hỗ trợ đổi trả theo chính sách.' },
+            ].map((item) => (
+              <div key={item.title} className="card-glass card-glass-hover rounded-2xl p-8 transition-all duration-300">
+                <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center text-primary text-2xl mb-6">
+                  <i className={item.icon} />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
+                <p className="text-gray-600">{item.desc}</p>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">
-                Link TikTok Shop chính thức
-              </h3>
-              <p className="text-gray-600">
-                Tất cả link sản phẩm đều là link chính thức từ TikTok Shop, đảm
-                bảo 100% an toàn và uy tín. Bạn không cần lo lắng về link giả
-                mạo hay lừa đảo.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-shadow border border-gray-100">
-              <div className="w-14 h-14 bg-[#ff5183]/10 rounded-xl flex items-center justify-center text-[#ff5183] text-2xl mb-6">
-                <i className="fa-solid fa-bolt"></i>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">
-                Mua hàng siêu nhanh
-              </h3>
-              <p className="text-gray-600">
-                Chỉ cần 1 click vào link sản phẩm, bạn sẽ được tự động chuyển
-                đến TikTok Shop và sản phẩm được thêm vào giỏ hàng ngay lập tức.
-                Mua sắm trở nên đơn giản và nhanh chóng hơn bao giờ hết.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-shadow border border-gray-100">
-              <div className="w-14 h-14 bg-[#ff5183]/10 rounded-xl flex items-center justify-center text-[#ff5183] text-2xl mb-6">
-                <i className="fa-solid fa-star"></i>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">
-                Sản phẩm được chọn lọc
-              </h3>
-              <p className="text-gray-600">
-                Tất cả sản phẩm đều được tôi chọn lọc kỹ lưỡng từ kênh TikTok
-                của mình, đảm bảo chất lượng và phù hợp với nhu cầu của bạn. Chỉ
-                những sản phẩm tốt mới được đăng trên website.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* How It Works */}
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Cách thức hoạt động
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Mua sắm với NờPêTê TikTok Shop chỉ cần 3 bước đơn giản
-            </p>
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Cách thức mua hàng</h2>
+            <p className="text-gray-600 max-w-xl mx-auto">Mua thực phẩm khô tại Thế Giới KHÔ chỉ cần 3 bước</p>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-r from-[#ff5183] to-[#ff006e] rounded-full flex items-center justify-center mx-auto mb-6 text-white text-3xl font-bold shadow-lg">
-                1
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">
-                Xem sản phẩm
-              </h3>
-              <p className="text-gray-600">
-                Duyệt qua danh sách sản phẩm được chọn lọc từ TikTok Shop trên
-                website của chúng tôi.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-r from-[#ff5183] to-[#ff006e] rounded-full flex items-center justify-center mx-auto mb-6 text-white text-3xl font-bold shadow-lg">
-                2
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">
-                Click vào link
-              </h3>
-              <p className="text-gray-600">
-                Click vào nút "CLICK XEM SẢN PHẨM" trên card sản phẩm để mở
-                TikTok Shop.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-r from-[#ff5183] to-[#ff006e] rounded-full flex items-center justify-center mx-auto mb-6 text-white text-3xl font-bold shadow-lg">
-                3
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">
-                Thêm giỏ hàng & Mua
-              </h3>
-              <p className="text-gray-600">
-                Sản phẩm sẽ tự động được thêm vào giỏ hàng TikTok Shop của bạn.
-                Hoàn tất thanh toán và nhận hàng!
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* TikTok Channel */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12">
-            Theo dõi kênh TikTok của tôi
-          </h2>
-          <div className="max-w-2xl mx-auto bg-gradient-to-r from-[#ff5183] to-[#ff006e] rounded-2xl p-8 md:p-12 text-white">
-            <div className="flex items-center justify-center gap-4 mb-6">
-              <i className="fa-brands fa-tiktok text-5xl"></i>
-              <div className="text-left">
-                <h3 className="text-2xl font-bold mb-1">@nopete_affiliate</h3>
-                <p className="text-white/90">Kênh TikTok chính thức</p>
-              </div>
-            </div>
-            <p className="text-lg mb-8 text-white/90 leading-relaxed">
-              Tất cả sản phẩm trên website đều được chọn lọc từ kênh TikTok của
-              tôi. Theo dõi kênh để xem video review sản phẩm và cập nhật những
-              sản phẩm hot nhất!
-            </p>
-            <a
-              href="https://www.tiktok.com/@nopete_affiliate"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 bg-white text-[#ff5183] px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-50 transition-all transform hover:scale-105 shadow-lg"
-            >
-              <i className="fa-brands fa-tiktok text-2xl"></i>
-              Theo dõi kênh TikTok
-              <i className="fa-solid fa-arrow-right"></i>
-            </a>
-          </div>
-
-          <div className="mt-16">
-            <h3 className="text-2xl font-bold text-gray-900 mb-8">
-              Sản phẩm được cập nhật từ TikTok
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <div className="w-12 h-12 bg-[#ff5183]/10 rounded-lg flex items-center justify-center text-[#ff5183] text-xl mb-4">
-                  <i className="fa-solid fa-video"></i>
+            {[
+              { step: 1, title: 'Chọn sản phẩm', desc: 'Duyệt danh mục hạt, khô, trái cây sấy và chọn sản phẩm phù hợp.' },
+              { step: 2, title: 'Thêm vào giỏ hàng', desc: 'Thêm sản phẩm vào giỏ hàng, điều chỉnh số lượng theo nhu cầu.' },
+              { step: 3, title: 'Thanh toán & nhận hàng', desc: 'Hoàn tất thanh toán. Chúng tôi giao hàng tận nơi, đóng gói cẩn thận.' },
+            ].map((item) => (
+              <div key={item.step} className="card-glass card-glass-hover rounded-2xl p-8 text-center transition-all duration-300">
+                <div className="w-16 h-16 bg-gradient-to-r from-primary to-primary-hover rounded-2xl flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold shadow-lg shadow-primary/20">
+                  {item.step}
                 </div>
-                <h4 className="font-bold text-gray-900 mb-2">
-                  Video review thực tế
-                </h4>
-                <p className="text-gray-600 text-sm">
-                  Xem video review chi tiết sản phẩm trên TikTok trước khi quyết
-                  định mua.
-                </p>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
+                <p className="text-gray-600">{item.desc}</p>
               </div>
-
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <div className="w-12 h-12 bg-[#ff5183]/10 rounded-lg flex items-center justify-center text-[#ff5183] text-xl mb-4">
-                  <i className="fa-solid fa-fire"></i>
-                </div>
-                <h4 className="font-bold text-gray-900 mb-2">
-                  Sản phẩm hot trending
-                </h4>
-                <p className="text-gray-600 text-sm">
-                  Cập nhật những sản phẩm đang được nhiều người quan tâm và mua
-                  nhất.
-                </p>
-              </div>
-
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <div className="w-12 h-12 bg-[#ff5183]/10 rounded-lg flex items-center justify-center text-[#ff5183] text-xl mb-4">
-                  <i className="fa-solid fa-check-circle"></i>
-                </div>
-                <h4 className="font-bold text-gray-900 mb-2">
-                  Chất lượng đảm bảo
-                </h4>
-                <p className="text-gray-600 text-sm">
-                  Chỉ chia sẻ những sản phẩm đã được kiểm chứng chất lượng và uy
-                  tín.
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>

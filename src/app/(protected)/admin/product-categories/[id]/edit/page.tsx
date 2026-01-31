@@ -131,7 +131,7 @@ export default function EditProductCategoryPage() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#ff5183]"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
           <p className="mt-4 text-gray-600">Đang tải...</p>
         </div>
       </div>
@@ -180,7 +180,7 @@ export default function EditProductCategoryPage() {
                     type="text"
                     value={formData.name}
                     onChange={(e) => handleChange('name', e.target.value)}
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
                       errors.name ? 'border-red-500' : 'border-gray-300'
                     }`}
                     placeholder="Nhập tên danh mục"
@@ -197,14 +197,14 @@ export default function EditProductCategoryPage() {
                       type="text"
                       value={formData.slug}
                       onChange={(e) => handleChange('slug', e.target.value)}
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent"
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                       placeholder="slug-tu-dong-tao"
                     />
                     <button
                       type="button"
                       onClick={handleGenerateSlug}
                       disabled={!formData.name.trim()}
-                      className="px-4 py-2 bg-[#ff5183] text-white rounded-lg hover:bg-[#ff006e] disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500 transition-colors"
+                      className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500 transition-colors"
                       title="Tạo slug từ tên danh mục"
                     >
                       <i className="fas fa-magic"></i>
@@ -221,7 +221,7 @@ export default function EditProductCategoryPage() {
                     value={formData.description}
                     onChange={(e) => handleChange('description', e.target.value)}
                     rows={4}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                     placeholder="Nhập mô tả danh mục"
                   />
                 </div>
@@ -242,7 +242,7 @@ export default function EditProductCategoryPage() {
                   type="url"
                   value={formData.image}
                   onChange={(e) => handleChange('image', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff5183] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                   placeholder="https://..."
                 />
                 {formData.image && (

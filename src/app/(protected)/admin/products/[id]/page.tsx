@@ -34,7 +34,7 @@ export default function ProductDetailPage() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#ff5183]"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
           <p className="mt-4 text-gray-600">Đang tải...</p>
         </div>
       </div>
@@ -114,13 +114,13 @@ export default function ProductDetailPage() {
                 </dd>
               </div>
               <div>
-                <dt className="text-sm font-medium text-gray-500">Link TikTok Shop</dt>
+                <dt className="text-sm font-medium text-gray-500">Link sản phẩm</dt>
                 <dd className="mt-1">
                   <a
                     href={product.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-[#ff5183] hover:underline break-all"
+                    className="text-sm text-primary hover:underline break-all"
                   >
                     {product.url}
                     <i className="fas fa-external-link-alt ml-2"></i>
@@ -188,7 +188,7 @@ export default function ProductDetailPage() {
                 onClick={() => window.open(product.url, '_blank')}
               >
                 <i className="fas fa-external-link-alt mr-2"></i>
-                Mở trên TikTok Shop
+                Mở link sản phẩm
               </Button>
               <Button
                 variant="outline"
