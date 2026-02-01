@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import { apiAuth } from '@/api/auth';
 import { useMutation } from '@tanstack/react-query';
+import { appConfig } from '@/config/app.config';
 
 export default function AdminLogin() {
   const router = useRouter();
@@ -48,7 +49,7 @@ export default function AdminLogin() {
 
         {/* Login Form */}
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-lg bg-white shadow-lg p-8 space-y-6">
+          <div className="card-glass rounded-2xl p-8 space-y-6">
             {/* Error Message */}
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center">
@@ -60,7 +61,7 @@ export default function AdminLogin() {
             {/* Email Input */}
             <div>
               <label
-                  htmlFor="username"
+                htmlFor="username"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Username
@@ -153,7 +154,7 @@ export default function AdminLogin() {
           {/* Footer */}
           <div className="text-center">
             <p className="text-xs text-gray-500">
-              © 2024 Affiliate Website. All rights reserved.
+              © {new Date().getFullYear()} {appConfig.name}. {appConfig.copyright.text}
             </p>
           </div>
         </form>

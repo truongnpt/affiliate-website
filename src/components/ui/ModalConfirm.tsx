@@ -79,7 +79,7 @@ export default function ModalConfirm({
           {typeof message === 'string' ? <p>{message}</p> : message}
         </div>
         <div className="flex justify-end gap-3">
-          <Button variant="outline" onClick={onClose} disabled={loading}>
+          <Button variant="secondary" onClick={onClose} disabled={loading}>
             {cancelText}
           </Button>
           <button

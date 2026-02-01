@@ -141,7 +141,6 @@ const create = async (product: {
   discount?: number;
   category_id: number;
   image: string;
-  url: string;
   rating?: number;
   sales?: number;
   description?: string;
@@ -171,7 +170,6 @@ const update = async (id: number, product: {
   discount?: number;
   category_id?: number;
   image?: string;
-  url?: string;
   rating?: number;
   sales?: number;
   description?: string;

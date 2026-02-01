@@ -177,26 +177,31 @@ const ProductDetail = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3">
-                <button
-                  onClick={() => {
-                    addToCart({ id: product.id, name: product.name, price: product.price, discount: product.discount || 0, image: product.image, url: product.url, slug: product.slug, product_categories: product.product_categories, quantity });
-                    showToast(`Đã thêm ${quantity} sản phẩm vào giỏ hàng!`, { variant: 'success', title: 'Thêm vào giỏ' });
-                  }}
-                  className="flex-1 bg-white border-2 border-primary text-primary hover:bg-primary/5 py-4 rounded-2xl font-bold text-lg transition-all flex justify-center items-center gap-3"
-                >
-                  <i className="fa-solid fa-cart-plus text-xl" />
-                  Thêm vào giỏ hàng
-                </button>
-                <button
-                  onClick={() => {
-                    addToCart({ id: product.id, name: product.name, price: product.price, discount: product.discount || 0, image: product.image, url: product.url, slug: product.slug, product_categories: product.product_categories, quantity });
-                    router.push('/checkout');
-                  }}
-                  className="flex-1 bg-primary hover:bg-primary-hover text-white py-4 rounded-2xl font-bold text-lg transition-all flex justify-center items-center gap-3 shadow-lg shadow-primary/20 hover:scale-[1.02]"
-                >
-                  <i className="fa-solid fa-bolt text-xl" />
-                  Mua ngay
-                </button>
+                {product.is_buy ? (<>
+                  <button
+                    onClick={() => {
+                      addToCart({ id: product.id, name: product.name, price: product.price, discount: product.discount || 0, image: product.image, slug: product.slug, product_categories: product.product_categories, quantity });
+                      showToast(`Đã thêm ${quantity} sản phẩm vào giỏ hàng!`, { variant: 'success', title: 'Thêm vào giỏ' });
+                    }}
+                    className="flex-1 bg-white border-2 border-primary text-primary hover:bg-primary/5 py-4 rounded-2xl font-bold text-lg transition-all flex justify-center items-center gap-3"
+                  >
+                    <i className="fa-solid fa-cart-plus text-xl" />
+                    Thêm vào giỏ hàng
+                  </button>
+                  <button
+                    onClick={() => {
+                      addToCart({ id: product.id, name: product.name, price: product.price, discount: product.discount || 0, image: product.image, slug: product.slug, product_categories: product.product_categories, quantity });
+                      router.push('/checkout');
+                    }}
+                    className="flex-1 bg-primary hover:bg-primary-hover text-white py-4 rounded-2xl font-bold text-lg transition-all flex justify-center items-center gap-3 shadow-lg shadow-primary/20 hover:scale-[1.02]"
+                  >
+                    <i className="fa-solid fa-bolt text-xl" />
+                    Mua ngay
+                  </button></>) :
+                  <div className="flex-1 px-4 border-2 border-primary text-primary bg-primary/5 py-4 rounded-2xl font-bold text-lg transition-all flex justify-center items-center gap-3">
+                    <i className="fa-solid fa-cart-plus text-xl" />
+                    Tạm thời hết hàng. Quý khách vui lòng quay lại sau ạ.
+                  </div>}
               </div>
             </div>
             <p className="text-center text-sm text-gray-600 flex items-center justify-center gap-2">
@@ -259,7 +264,7 @@ const ProductDetail = () => {
                 </div>
               )}
             </div>
-            <div className="relative overflow-hidden mt-14">
+            <div className="relative overflow-hidden pt-14">
               <div className="flex transition-transform duration-500 ease-out" style={{ transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)` }}>
                 {relatedProducts.map((rp: any) => (
                   <div key={rp.id} className="flex-shrink-0 px-2 lg:px-3" style={{ width: `${100 / itemsPerPage}%`, minWidth: `${100 / itemsPerPage}%` }}>

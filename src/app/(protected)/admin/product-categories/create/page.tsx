@@ -60,20 +60,20 @@ export default function CreateProductCategoryPage() {
   const handleChange = (field: string, value: string) => {
     setFormData(prev => {
       const updated = { ...prev, [field]: value };
-      
+
       // Auto-generate slug from name if name is changed and slug hasn't been manually edited
       if (field === 'name' && !isSlugManuallyEdited) {
         updated.slug = generateSlug(value);
       }
-      
+
       // Track if slug is manually edited
       if (field === 'slug') {
         setIsSlugManuallyEdited(true);
       }
-      
+
       return updated;
     });
-    
+
     if (errors[field]) {
       setErrors(prev => {
         const newErrors = { ...prev };
@@ -120,9 +120,8 @@ export default function CreateProductCategoryPage() {
                     type="text"
                     value={formData.name}
                     onChange={(e) => handleChange('name', e.target.value)}
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent ${
-                      errors.name ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent ${errors.name ? 'border-red-500' : 'border-gray-300'
+                      }`}
                     placeholder="Nhập tên danh mục"
                   />
                   {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
@@ -144,7 +143,7 @@ export default function CreateProductCategoryPage() {
                       type="button"
                       onClick={handleGenerateSlug}
                       disabled={!formData.name.trim()}
-                      className="px-4 py-2 bg-[primary] text-white rounded-lg hover:bg-primary-hover disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500 transition-colors"
+                      className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500 transition-colors"
                       title="Tạo slug từ tên danh mục"
                     >
                       <i className="fas fa-magic"></i>

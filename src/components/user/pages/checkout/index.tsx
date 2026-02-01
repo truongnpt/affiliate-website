@@ -2,8 +2,13 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useMutation } from '@tanstack/react-query';
 import { useCart, removeFromCart, updateCartItemQuantity, getCartTotal, clearCart } from '@/store/cart';
-import { apiOrders } from '@/api/orders';
+import { apiOrders, CreateOrderPayload } from '@/api/orders';
+import ModalConfirm from '@/components/ui/ModalConfirm';
+import { orderTemplate } from '@/email-templates/order-template';
+import { useToast } from '@/store/toast';
+import Button from '@/components/ui/Button';
 
 type FormData = {
   fullName: string;
@@ -22,12 +27,15 @@ const initialForm: FormData = {
 };
 
 const Checkout = () => {
+  const { showToast } = useToast();
   const cartItems = useCart();
   const totalPrice = getCartTotal();
   const [form, setForm] = useState<FormData>(initialForm);
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
-  const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [showOrderSuccess, setShowOrderSuccess] = useState(false);
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const [productIdToRemove, setProductIdToRemove] = useState<number | null>(null);
 
   const handleChange = (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
@@ -47,8 +55,15 @@ const Checkout = () => {
   };
 
   const handleRemoveItem = (productId: number) => {
-    if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
-      removeFromCart(productId);
+    setProductIdToRemove(productId);
+    setShowRemoveModal(true);
+  };
+
+  const confirmRemoveItem = () => {
+    if (productIdToRemove !== null) {
+      removeFromCart(productIdToRemove);
+      setProductIdToRemove(null);
+      setShowRemoveModal(false);
     }
   };
 
@@ -60,52 +75,123 @@ const Checkout = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Create order mutation
+  const { mutate: createOrder, isPending: isSubmitting } = useMutation({
+    mutationFn: async (payload: CreateOrderPayload) => {
+      const result = await apiOrders.create(payload);
+      if (!result.data) {
+        const errorMessage = (result as { message?: string; error?: string }).message ||
+          (result as { error?: string }).error ||
+          'Không thể tạo đơn hàng. Vui lòng thử lại.';
+        showToast(errorMessage, { variant: 'error', title: 'Lỗi' });
+      }
+      return result.data;
+    },
+    onSuccess: (order) => {
+      showToast('Chúng tôi đã nhận đơn hàng của bạn.', { variant: 'success', title: 'Đặt hàng thành công' });
+      setShowOrderSuccess(true);
+      // Gửi email thông báo đơn hàng mới
+      try {
+        const emailHtml = orderTemplate({
+          orderId: order.id,
+          fullName: form.fullName.trim(),
+          phone: form.phone.trim(),
+          email: form.email.trim(),
+          address: form.address.trim(),
+          note: form.note.trim() || undefined,
+          total: totalPrice,
+          paymentMethod: 'cod',
+          items: cartItems.map((item) => ({
+            product_name: item.name,
+            product_image: item.image,
+            product_url: `/products/${item.slug}`,
+            price: item.price,
+            discount: item.discount ?? 0,
+            quantity: item.quantity,
+          })),
+          createdAt: order.created_at,
+        });
+
+        fetch('/api/send-mail', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            subject: `Đơn hàng mới #ORD${order.id} - ${form.fullName.trim()}`,
+            html: emailHtml,
+          }),
+        });
+      } catch (emailError) {
+        console.error('Error sending order email:', emailError);
+        // Không chặn flow nếu gửi email lỗi
+      }
+
+      clearCart();
+    },
+    onError: (error: Error) => {
+      showToast(error.message || 'Lỗi kết nối. Vui lòng thử lại.', { variant: 'error', title: 'Lỗi' });
+      setSubmitError(error.message || 'Lỗi kết nối. Vui lòng thử lại.');
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitError(null);
     if (!validate()) return;
-    setSubmitting(true);
-    try {
-      const result = await apiOrders.create({
-        full_name: form.fullName.trim(),
-        phone: form.phone.trim(),
-        email: form.email.trim(),
-        address: form.address.trim(),
-        note: form.note.trim() || undefined,
-        total: totalPrice,
-        payment_method: 'cod',
-        items: cartItems.map((item) => ({
-          product_id: item.id,
-          product_name: item.name,
-          product_image: item.image,
-          product_url: item.url,
-          price: item.price,
-          discount: item.discount ?? 0,
-          quantity: item.quantity,
-        })),
-      });
-      if (result.data) {
-        clearCart();
-        window.location.href = '/cart?order=success';
-        return;
-      }
-      setSubmitError((result as { message?: string; error?: string }).message || (result as { error?: string }).error || 'Không thể tạo đơn hàng. Vui lòng thử lại.');
-    } catch (err) {
-      setSubmitError('Lỗi kết nối. Vui lòng thử lại.');
-    } finally {
-      setSubmitting(false);
-    }
+
+    const payload: CreateOrderPayload = {
+      full_name: form.fullName.trim(),
+      phone: form.phone.trim(),
+      email: form.email.trim(),
+      address: form.address.trim(),
+      note: form.note.trim() || undefined,
+      total: totalPrice,
+      payment_method: 'cod',
+      items: cartItems.map((item) => ({
+        product_id: item.id,
+        product_name: item.name,
+        product_image: item.image,
+        product_url: `/products/${item.slug}`,
+        price: item.price,
+        discount: item.discount ?? 0,
+        quantity: item.quantity,
+      })),
+    };
+
+    createOrder(payload);
   };
 
-  if (cartItems.length === 0) {
+  if (showOrderSuccess) {
     return (
-      <main className="min-h-screen bg-gradient-to-b from-gray-50/80 via-white to-gray-50/50 pb-16">
+      <main className="bg-gradient-to-b from-gray-50/80 via-white to-gray-50/50 pb-16">
         <div className="h-[5.25rem] sm:h-[5.5rem]" aria-hidden />
         <div className="flex flex-col items-center justify-center min-h-[50vh] gap-6">
           <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
-            <i className="fa-solid fa-spinner text-3xl text-primary animate-spin" />
+            <i className="fa-solid fa-circle-check text-3xl text-primary" />
           </div>
-          <p className="text-gray-500 font-medium">Đang chuyển hướng...</p>
+          <p className="text-gray-500 font-medium">Chúng tôi đã nhận đơn hàng của bạn. Cảm ơn bạn đã mua hàng.</p>
+          <div className="flex items-center gap-2">
+            <Link href="/products" className="text-primary font-medium"><Button><i className="fa-solid fa-shopping-bag mr-2" /> Tiếp tục mua sắm</Button></Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (cartItems.length === 0 && !showOrderSuccess) {
+    return (
+      <main className="bg-gradient-to-b from-gray-50/80 via-white to-gray-50/50 pb-16">
+        <div className="h-[5.25rem] sm:h-[5.5rem]" aria-hidden />
+        <div className="flex flex-col items-center justify-center min-h-[50vh] gap-6">
+          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
+            <i className="fa-solid fa-sad-tear text-3xl text-primary" />
+          </div>
+          <p className="text-gray-500 font-medium">Không có sản phẩm nào cả. Hãy thêm sản phẩm vào giỏ hàng để tiếp tục.</p>
+          <div className="flex items-center gap-2">
+            <Link href="/products" className="text-primary font-medium hover:underline"><Button variant="outline"><i className="fa-solid fa-shopping-bag mr-2" /> Xem sản phẩm</Button></Link>
+            <Link href="/cart" className="text-primary font-medium hover:underline"><Button><i className="fa-solid fa-cart-shopping mr-2" /> Quay lại giỏ hàng</Button></Link>
+          </div>
         </div>
       </main>
     );
@@ -116,9 +202,9 @@ const Checkout = () => {
       <div className="h-[5.25rem] sm:h-[5.5rem]" aria-hidden />
 
       {/* Page Header */}
-      <div className="relative overflow-hidden mt-14">
+      <div className="relative overflow-hidden">
         <div className="absolute inset-0" />
-        <div className="relative max-w-7xl mx-auto py-12 sm:py-14 px-4 sm:px-6 lg:px-8">
+        <div className="relative max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
           <div className="card-glass rounded-3xl p-8 sm:p-10 text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
               <i className="fa-solid fa-credit-card text-primary" />
@@ -132,10 +218,54 @@ const Checkout = () => {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4">
+      <form onSubmit={handleSubmit} className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left: Form + Order Items */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Order Items */}
+            <div className="card-glass rounded-2xl p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                <i className="fa-solid fa-bag-shopping text-primary" />
+                Sản phẩm trong đơn
+              </h2>
+              <div className="space-y-4">
+                {cartItems.map((item, idx) => {
+                  const itemPrice = item.discount ? Math.round(item.price * (1 - item.discount / 100)) : item.price;
+                  const itemTotal = itemPrice * item.quantity;
+                  return (
+                    <div key={item.id} className="flex gap-4 p-4 rounded-xl bg-white/50 border border-gray-100">
+                      <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden bg-gray-100">
+                        <img src={item.image} alt={item.name} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/200'; }} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-start gap-2">
+                          <div>
+                            <Link href={`/products/${item.slug}`} className="font-bold text-gray-900 hover:text-primary line-clamp-2 text-sm sm:text-base">
+                              {item.name}
+                            </Link>
+                            <p className="text-xs text-gray-500 mt-0.5">x{item.quantity}</p>
+                          </div>
+                          <span className="font-bold text-primary whitespace-nowrap">{itemTotal.toLocaleString('vi-VN')}đ</span>
+                        </div>
+                        <div className="flex items-center gap-2 mt-2">
+                          <button type="button" onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)} className="w-7 h-7 rounded-lg border border-gray-200 flex items-center justify-center hover:bg-gray-100 text-xs" aria-label="Giảm">
+                            <i className="fa-solid fa-minus" />
+                          </button>
+                          <span className="font-semibold text-sm min-w-[20px] text-center">{item.quantity}</span>
+                          <button type="button" onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)} className="w-7 h-7 rounded-lg border border-gray-200 flex items-center justify-center hover:bg-gray-100 text-xs" aria-label="Tăng">
+                            <i className="fa-solid fa-plus" />
+                          </button>
+                          <button type="button" onClick={() => handleRemoveItem(item.id)} className="ml-2 text-red-500 hover:text-red-700 text-xs" aria-label="Xóa">
+                            <i className="fa-solid fa-trash" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
             {/* Thông tin giao hàng */}
             <div className="card-glass rounded-2xl p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
@@ -236,56 +366,6 @@ const Checkout = () => {
                 <i className="fa-solid fa-hand-holding-dollar text-2xl text-primary" />
               </label>
             </div>
-
-            {/* Order Items */}
-            <div className="card-glass rounded-2xl p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                <i className="fa-solid fa-bag-shopping text-primary" />
-                Sản phẩm trong đơn
-              </h2>
-              <div className="space-y-4">
-                {cartItems.map((item, idx) => {
-                  const itemPrice = item.discount ? Math.round(item.price * (1 - item.discount / 100)) : item.price;
-                  const itemTotal = itemPrice * item.quantity;
-                  return (
-                    <div key={item.id} className="flex gap-4 p-4 rounded-xl bg-white/50 border border-gray-100">
-                      <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden bg-gray-100">
-                        <img src={item.image} alt={item.name} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/200'; }} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex justify-between items-start gap-2">
-                          <div>
-                            {item.slug ? (
-                              <Link href={`/products/${item.slug}`} className="font-bold text-gray-900 hover:text-primary line-clamp-2 text-sm sm:text-base">
-                                {item.name}
-                              </Link>
-                            ) : (
-                              <a href={item.url} target="_blank" rel="noopener noreferrer" className="font-bold text-gray-900 hover:text-primary line-clamp-2 text-sm sm:text-base">
-                                {item.name}
-                              </a>
-                            )}
-                            <p className="text-xs text-gray-500 mt-0.5">x{item.quantity}</p>
-                          </div>
-                          <span className="font-bold text-primary whitespace-nowrap">{itemTotal.toLocaleString('vi-VN')}đ</span>
-                        </div>
-                        <div className="flex items-center gap-2 mt-2">
-                          <button type="button" onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)} className="w-7 h-7 rounded-lg border border-gray-200 flex items-center justify-center hover:bg-gray-100 text-xs" aria-label="Giảm">
-                            <i className="fa-solid fa-minus" />
-                          </button>
-                          <span className="font-semibold text-sm min-w-[20px] text-center">{item.quantity}</span>
-                          <button type="button" onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)} className="w-7 h-7 rounded-lg border border-gray-200 flex items-center justify-center hover:bg-gray-100 text-xs" aria-label="Tăng">
-                            <i className="fa-solid fa-plus" />
-                          </button>
-                          <button type="button" onClick={() => handleRemoveItem(item.id)} className="ml-2 text-red-500 hover:text-red-700 text-xs" aria-label="Xóa">
-                            <i className="fa-solid fa-trash" />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
           </div>
 
           {/* Order Summary Sidebar */}
@@ -318,10 +398,10 @@ const Checkout = () => {
 
               <button
                 type="submit"
-                disabled={submitting}
+                disabled={isSubmitting}
                 className="w-full bg-primary hover:bg-primary-hover text-white py-4 rounded-2xl font-bold text-lg transition-all flex justify-center items-center gap-3 shadow-lg shadow-primary/20 hover:scale-[1.02] mb-3 disabled:opacity-70 disabled:pointer-events-none disabled:hover:scale-100"
               >
-                {submitting ? (
+                {isSubmitting ? (
                   <>
                     <i className="fa-solid fa-spinner text-xl animate-spin" />
                     Đang xử lý...
@@ -360,6 +440,21 @@ const Checkout = () => {
           </div>
         </div>
       </form>
+
+      {/* Remove Item Modal */}
+      <ModalConfirm
+        open={showRemoveModal}
+        onClose={() => {
+          setShowRemoveModal(false);
+          setProductIdToRemove(null);
+        }}
+        onConfirm={confirmRemoveItem}
+        title="Xóa sản phẩm"
+        message="Bạn có chắc chắn muốn xóa sản phẩm này?"
+        confirmText="Xóa"
+        cancelText="Hủy"
+        variant="danger"
+      />
     </main>
   );
 };

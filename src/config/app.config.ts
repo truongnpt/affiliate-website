@@ -8,6 +8,7 @@ export const appConfig = {
   name: 'Thế Giới KHÔ',
   tagline: 'Thực phẩm khô chất lượng - Thêm giỏ hàng & mua ngay',
   logo: '/images/logo.png',
+  email: 'thegioikho@gmail.com',
   description:
     'Chuyên cung cấp thực phẩm khô chất lượng: hạt dinh dưỡng, các loại khô, trái cây sấy. Thêm vào giỏ hàng và mua hàng đơn giản, nhanh chóng.',
   copyright: {
@@ -30,6 +31,7 @@ export const appConfig = {
     support: '/support',
     contact: '/contact',
     terms: '/terms',
+    login: '/login',
   },
 
   // Features

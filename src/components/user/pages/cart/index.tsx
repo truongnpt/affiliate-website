@@ -5,12 +5,16 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useCart, removeFromCart, updateCartItemQuantity, clearCart, getCartTotal } from '@/store/cart';
 import { appConfig } from '@/config/app.config';
+import ModalConfirm from '@/components/ui/ModalConfirm';
 
 const Cart = () => {
   const searchParams = useSearchParams();
   const cartItems = useCart();
   const [isClearing, setIsClearing] = useState(false);
   const [showOrderSuccess, setShowOrderSuccess] = useState(false);
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const [showClearModal, setShowClearModal] = useState(false);
+  const [productIdToRemove, setProductIdToRemove] = useState<number | null>(null);
 
   useEffect(() => {
     if (searchParams?.get('order') === 'success') {
@@ -20,8 +24,15 @@ const Cart = () => {
   }, [searchParams]);
 
   const handleRemoveItem = (productId: number) => {
-    if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?')) {
-      removeFromCart(productId);
+    setProductIdToRemove(productId);
+    setShowRemoveModal(true);
+  };
+
+  const confirmRemoveItem = () => {
+    if (productIdToRemove !== null) {
+      removeFromCart(productIdToRemove);
+      setProductIdToRemove(null);
+      setShowRemoveModal(false);
     }
   };
 
@@ -34,20 +45,23 @@ const Cart = () => {
   };
 
   const handleClearCart = () => {
-    if (confirm('Bạn có chắc chắn muốn xóa tất cả sản phẩm khỏi giỏ hàng?')) {
-      setIsClearing(true);
-      clearCart();
-      setTimeout(() => setIsClearing(false), 300);
-    }
+    setShowClearModal(true);
+  };
+
+  const confirmClearCart = () => {
+    setIsClearing(true);
+    clearCart();
+    setTimeout(() => setIsClearing(false), 300);
+    setShowClearModal(false);
   };
 
   const totalPrice = getCartTotal();
 
   if (cartItems.length === 0) {
     return (
-      <main className="min-h-screen bg-gradient-to-b from-gray-50/80 via-white to-gray-50/50 pb-16">
+      <main className="bg-gradient-to-b from-gray-50/80 via-white to-gray-50/50 pt-26 pb-16">
         {showOrderSuccess && (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="card-glass rounded-2xl p-4 flex items-center gap-3 bg-primary/5 border border-primary/20">
               <i className="fa-solid fa-circle-check text-2xl text-primary flex-shrink-0" />
               <div>
@@ -57,18 +71,7 @@ const Cart = () => {
             </div>
           </div>
         )}
-        <div className="relative overflow-hidden mt-14">
-          <div className="absolute inset-0 " />
-          <div className="relative max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-            <div className="card-glass rounded-3xl p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <i className="fa-solid fa-shopping-cart text-3xl text-primary" />
-                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Giỏ hàng</h1>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
           <div className="card-glass rounded-2xl p-12 sm:p-16 text-center">
             <div className="w-24 h-24 mx-auto mb-6 rounded-2xl bg-primary/10 flex items-center justify-center">
               <i className="fa-solid fa-shopping-cart text-5xl text-primary/60" />
@@ -89,9 +92,9 @@ const Cart = () => {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-gray-50/80 via-white to-gray-50/50 pb-16">
+    <main className="bg-gradient-to-b from-gray-50/80 via-white to-gray-50/50 pt-16 pb-16">
       {showOrderSuccess && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="card-glass rounded-2xl p-4 flex items-center gap-3 bg-primary/5 border border-primary/20">
             <i className="fa-solid fa-circle-check text-2xl text-primary flex-shrink-0" />
             <div>
@@ -102,7 +105,7 @@ const Cart = () => {
         </div>
       )}
       {/* Page Header - Liquid glass */}
-      <div className="relative overflow-hidden mt-14">
+      <div className="relative overflow-hidden">
         <div className="absolute inset-0" />
         <div className="relative max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
           <div className="card-glass rounded-3xl p-6 sm:p-8">
@@ -124,7 +127,7 @@ const Cart = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 mt-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-5">
@@ -135,32 +138,18 @@ const Cart = () => {
                 <div key={item.id} className="card-glass card-glass-hover rounded-2xl p-6 transition-all duration-300 animate-product-in" style={{ animationDelay: `${idx * 0.05}s` }}>
                   <div className="flex flex-col sm:flex-row gap-4">
                     <div className="flex-shrink-0">
-                      {item.slug ? (
-                        <Link href={`/products/${item.slug}`}>
-                          <div className="w-32 h-32 sm:w-28 sm:h-28 bg-gray-100 rounded-xl overflow-hidden">
-                            <img src={item.image} alt={item.name} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/200'; }} />
-                          </div>
-                        </Link>
-                      ) : (
-                        <a href={item.url} target="_blank" rel="noopener noreferrer">
-                          <div className="w-32 h-32 sm:w-28 sm:h-28 bg-gray-100 rounded-xl overflow-hidden">
-                            <img src={item.image} alt={item.name} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/200'; }} />
-                          </div>
-                        </a>
-                      )}
+                      <Link href={`/products/${item.slug}`}>
+                        <div className="w-32 h-32 sm:w-28 sm:h-28 bg-gray-100 rounded-xl overflow-hidden">
+                          <img src={item.image} alt={item.name} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/200'; }} />
+                        </div>
+                      </Link>
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-start gap-4">
                         <div className="flex-1 min-w-0">
-                          {item.slug ? (
-                            <Link href={`/products/${item.slug}`} className="block text-lg font-bold text-gray-900 hover:text-primary transition-colors mb-2 line-clamp-2">
-                              {item.name}
-                            </Link>
-                          ) : (
-                            <a href={item.url} target="_blank" rel="noopener noreferrer" className="block text-lg font-bold text-gray-900 hover:text-primary transition-colors mb-2 line-clamp-2">
-                              {item.name}
-                            </a>
-                          )}
+                          <Link href={`/products/${item.slug}`} className="block text-lg font-bold text-gray-900 hover:text-primary transition-colors mb-2 line-clamp-2">
+                            {item.name}
+                          </Link>
                           {item.product_categories && (
                             <div className="text-sm text-gray-500 mb-2">
                               <i className="fa-solid fa-tag mr-1" />
@@ -248,6 +237,34 @@ const Cart = () => {
           </div>
         </div>
       </div>
+
+      {/* Remove Item Modal */}
+      <ModalConfirm
+        open={showRemoveModal}
+        onClose={() => {
+          setShowRemoveModal(false);
+          setProductIdToRemove(null);
+        }}
+        onConfirm={confirmRemoveItem}
+        title="Xóa sản phẩm"
+        message="Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?"
+        confirmText="Xóa"
+        cancelText="Hủy"
+        variant="danger"
+      />
+
+      {/* Clear Cart Modal */}
+      <ModalConfirm
+        open={showClearModal}
+        onClose={() => setShowClearModal(false)}
+        onConfirm={confirmClearCart}
+        title="Xóa tất cả sản phẩm"
+        message="Bạn có chắc chắn muốn xóa tất cả sản phẩm khỏi giỏ hàng?"
+        confirmText="Xóa tất cả"
+        cancelText="Hủy"
+        variant="danger"
+        loading={isClearing}
+      />
     </main>
   );
 };

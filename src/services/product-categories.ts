@@ -133,10 +133,47 @@ const deleteById = async (id: number) => {
   }
 };
 
+const getFeatured = async (limit: number = 4) => {
+  try {
+    // Get all categories with their products
+    const { data: categories, error } = await supabase
+      .from('product_categories')
+      .select('*, products(id)')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching featured categories:', error);
+      return { message: 'Internal Server Error', error: error.message };
+    }
+
+    if (!categories) {
+      return { data: [] };
+    }
+
+    // Calculate product count for each category and sort by count
+    const categoriesWithCount = categories
+      .map((category) => ({
+        ...category,
+        productCount: Array.isArray(category.products) ? category.products.length : 0,
+      }))
+      .sort((a, b) => b.productCount - a.productCount)
+      .slice(0, limit)
+      .map(({ products, ...category }) => category); // Remove products array, keep only count
+
+    return {
+      data: categoriesWithCount,
+    };
+  } catch (err: any) {
+    console.error('Unexpected error:', err);
+    return { message: 'Internal Server Error', error: err.message };
+  }
+};
+
 export const productCategoriesService = {
   getList,
   getById,
   create,
   update,
   deleteById,
+  getFeatured,
 };

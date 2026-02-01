@@ -1,17 +1,46 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
+import { useQuery } from '@tanstack/react-query';
+import { apiProductCategories } from '@/api/product-categories';
 import SectionNewProducts from './SectionNewProducts';
 
 const Home = () => {
+  // Fetch featured categories (top 4 by product count)
+  const { data: featuredCategoriesData, isLoading: isLoadingCategories } = useQuery({
+    queryKey: ['featured_categories'],
+    queryFn: async () => await apiProductCategories.getFeatured(4),
+  });
+
+  const featuredCategories = featuredCategoriesData?.data || [];
+
+  // Helper function to get icon and color based on category name
+  const getCategoryStyle = (name: string) => {
+    const nameLower = name.toLowerCase();
+    if (nameLower.includes('hạt') || nameLower.includes('dinh dưỡng') || nameLower.includes('seedling')) {
+      return { icon: 'fa-solid fa-seedling', color: 'from-amber-500 to-amber-600' };
+    }
+    if (nameLower.includes('khô') || nameLower.includes('cookie')) {
+      return { icon: 'fa-solid fa-cookie', color: 'from-orange-500 to-orange-600' };
+    }
+    if (nameLower.includes('trái cây') || nameLower.includes('sấy') || nameLower.includes('apple')) {
+      return { icon: 'fa-solid fa-apple-whole', color: 'from-red-500 to-red-600' };
+    }
+    if (nameLower.includes('đậu') || nameLower.includes('leaf')) {
+      return { icon: 'fa-solid fa-leaf', color: 'from-green-500 to-green-600' };
+    }
+    // Default style
+    return { icon: 'fa-solid fa-tag', color: 'from-primary to-primary-hover' };
+  };
+
   return (
     <main>
       {/* HERO SECTION - Full-width, trẻ trung, hiện đại */}
-      <section id="hero" className="relative w-full min-h-[85vh] flex items-center overflow-hidden">
+      <section id="hero" className="relative w-full min-h-[100vh] flex items-center overflow-hidden">
         {/* Full-width background */}
         <div className="absolute inset-0 w-full">
           <Image
-            src="/images/hero-banner.png"
+            src="/images/top-banner.png"
             alt="Thực phẩm khô ngon sạch - Thế Giới KHÔ"
             fill
             className="object-cover object-center"
@@ -51,20 +80,20 @@ const Home = () => {
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 animate-hero-fade-up animate-hero-fade-up-delay-4">
+            <div className="flex gap-4 animate-hero-fade-up animate-hero-fade-up-delay-4">
               <a
                 href="/products"
-                className="mb-4 group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-primary text-white font-bold text-lg hover:bg-primary-hover transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/30 animate-hero-pulse"
+                className="mb-4 group inline-flex items-center justify-center gap-2 px-4 md:px-8 py-2 md:py-4 rounded-full bg-primary text-white font-bold text-sm md:text-lg hover:bg-primary-hover transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/30 animate-hero-pulse"
               >
-                <i className="fa-solid fa-cart-shopping text-xl group-hover:animate-bounce" />
+                <i className="fa-solid fa-cart-shopping text-xl group-hover:animate-bounce !hidden md:!inline-block " />
                 Xem sản phẩm ngay
-                <i className="fa-solid fa-arrow-right text-sm group-hover:translate-x-1 transition-transform" />
+                <i className="fa-solid fa-arrow-right text-sm group-hover:translate-x-1 transition-transform !hidden md:!inline-block " />
               </a>
               <a
                 href="/product-categories"
-                className="mb-4 inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-white/10 backdrop-blur-md border-2 border-white/30 text-white font-bold text-lg hover:bg-white/20 hover:border-white/50 transition-all duration-300"
+                className="mb-4 inline-flex items-center  justify-center gap-2 px-4 md:px-8 py-2 md:py-4 rounded-full bg-white/10 backdrop-blur-md border-2 border-white/30 text-white font-bold text-sm md:text-lg hover:bg-white/20 hover:border-white/50 transition-all duration-300"
               >
-                <i className="fa-solid fa-tags" />
+                <i className="fa-solid fa-tags !hidden md:!inline-block " />
                 Khám phá danh mục
               </a>
             </div>
@@ -88,13 +117,13 @@ const Home = () => {
               ].map((item, idx) => (
                 <div
                   key={idx}
-                  className={`flex items-center justify-center sm:justify-start gap-3 px-6 py-4 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 hover:border-primary/30 transition-all duration-300 group animate-hero-fade-up ${idx === 0 ? 'animate-hero-fade-up-delay-5' : idx === 1 ? 'animate-hero-fade-up-delay-6' : 'animate-hero-fade-up-delay-7'
+                  className={`flex items-center justify-center sm:justify-start gap-3 px-3 md:px-6 py-2 md:py-4 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 hover:border-primary/30 transition-all duration-300 group animate-hero-fade-up ${idx === 0 ? 'animate-hero-fade-up-delay-5' : idx === 1 ? 'animate-hero-fade-up-delay-6' : 'animate-hero-fade-up-delay-7'
                     }`}
                 >
-                  <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-primary/30 transition-all duration-300">
-                    <i className={`${item.icon} text-primary text-xl`} />
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-primary/30 transition-all duration-300">
+                    <i className={`${item.icon} text-primary text-lg md:text-xl`} />
                   </div>
-                  <span className="font-semibold text-white/95">{item.label}</span>
+                  <span className="font-semibold text-white/95 text-sm md:text-base">{item.label}</span>
                 </div>
               ))}
             </div>
@@ -290,28 +319,45 @@ const Home = () => {
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              { name: 'Hạt dinh dưỡng', icon: 'fa-solid fa-seedling', color: 'from-amber-500 to-amber-600', count: '100+' },
-              { name: 'Các loại khô', icon: 'fa-solid fa-cookie', color: 'from-orange-500 to-orange-600', count: '80+' },
-              { name: 'Trái cây sấy', icon: 'fa-solid fa-apple-whole', color: 'from-red-500 to-red-600', count: '60+' },
-              { name: 'Hạt đậu', icon: 'fa-solid fa-leaf', color: 'from-green-500 to-green-600', count: '50+' },
-            ].map((cat, idx) => (
-              <a
-                key={idx}
-                href={`/products?category=${idx + 1}`}
-                className="group bg-white p-6 rounded-2xl shadow-md hover:shadow-2xl transition-all border-2 border-gray-100 hover:border-primary text-center transform hover:-translate-y-2"
-              >
-                <div className={`w-16 h-16 bg-gradient-to-br ${cat.color} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
-                  <i className={`${cat.icon} text-white text-2xl`}></i>
+            {isLoadingCategories ? (
+              // Loading skeleton
+              Array.from({ length: 4 }).map((_, idx) => (
+                <div
+                  key={idx}
+                  className="bg-white p-6 rounded-2xl shadow-md border-2 border-gray-100 text-center animate-pulse"
+                >
+                  <div className="w-16 h-16 bg-gray-200 rounded-2xl mx-auto mb-4"></div>
+                  <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-3 bg-gray-200 rounded w-2/3 mx-auto"></div>
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">{cat.name}</h3>
-                <p className="text-sm text-gray-500">{cat.count} sản phẩm</p>
-                <div className="mt-4 flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span className="text-sm font-semibold mr-2">Xem ngay</span>
-                  <i className="fa-solid fa-arrow-right"></i>
-                </div>
-              </a>
-            ))}
+              ))
+            ) : featuredCategories.length > 0 ? (
+              featuredCategories.map((cat) => {
+                const style = getCategoryStyle(cat.name);
+                return (
+                  <a
+                    key={cat.id}
+                    href={`/products?category=${cat.id}`}
+                    className="group bg-white p-6 rounded-2xl shadow-md hover:shadow-2xl transition-all border-2 border-gray-100 hover:border-primary text-center transform hover:-translate-y-2"
+                  >
+                    <div className={`w-16 h-16 bg-gradient-to-br ${style.color} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
+                      <i className={`${style.icon} text-white text-2xl`}></i>
+                    </div>
+                    <h3 className="font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">{cat.name}</h3>
+                    <p className="text-sm text-gray-500">{cat.productCount || 0} sản phẩm</p>
+                    <div className="mt-4 flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span className="text-sm font-semibold mr-2">Xem ngay</span>
+                      <i className="fa-solid fa-arrow-right"></i>
+                    </div>
+                  </a>
+                );
+              })
+            ) : (
+              // Fallback if no categories
+              <div className="col-span-4 text-center py-8 text-gray-500">
+                <p>Chưa có danh mục nổi bật</p>
+              </div>
+            )}
           </div>
           <div className="text-center mt-12">
             <a

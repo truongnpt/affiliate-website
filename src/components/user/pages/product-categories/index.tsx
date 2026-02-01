@@ -28,7 +28,7 @@ const ProductCategories = () => {
 
 
       {/* Page Header - Liquid glass */}
-      <div className="relative overflow-hidden mt-14">
+      <div className="relative overflow-hidden pt-14">
         <div className="absolute inset-0 " />
         <div className="relative max-w-7xl mx-auto py-14 sm:py-16 px-4 sm:px-6 lg:px-8">
           <div className="card-glass rounded-3xl p-8 sm:p-10 text-center">
@@ -94,9 +94,12 @@ const ProductCategories = () => {
                 </div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors line-clamp-2 min-h-[3rem]">
+                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors line-clamp-2">
                   {category.name}
                 </h3>
+                <p className="text-gray-600 text-sm mb-3 line-clamp-3">
+                  {category.description}
+                </p>
                 <div className="flex items-center justify-between pt-4 border-t border-gray-100/80">
                   <span className="text-sm text-gray-500 font-medium">Xem sản phẩm</span>
                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary transition-all duration-300 group-hover:scale-110">
@@ -109,14 +112,14 @@ const ProductCategories = () => {
         </div>
 
         {/* Featured Collections */}
-        <div className="mt-16">
+        {/* <div className="mt-16">
           <div className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-4">
               <i className="fa-solid fa-fire text-primary" />
               <span className="text-sm font-semibold text-primary">Nổi bật</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Bộ sưu tập nổi bật</h2>
-            <p className="text-gray-600 max-w-xl mx-auto">Khám phá những bộ sưu tập thực phẩm khô được yêu thích nhất</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Sản phẩm nổi bật</h2>
+            <p className="text-gray-600 max-w-xl mx-auto">Khám phá những sản phẩm thực phẩm khô được yêu thích nhất</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -157,7 +160,7 @@ const ProductCategories = () => {
               <i className="fa-solid fa-arrow-right" />
             </a>
           </div>
-        </div>
+        </div> */}
       </div>
     </main>
   );

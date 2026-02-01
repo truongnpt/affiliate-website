@@ -57,7 +57,7 @@ const Header = () => {
     { href: appConfig.navigation.productCategories, label: 'Danh mục' },
     { href: appConfig.navigation.blogs, label: 'Blog' },
     { href: appConfig.navigation.about, label: 'Giới thiệu' },
-    { href: appConfig.navigation.support, label: 'Hỗ trợ' },
+    { href: appConfig.navigation.contact, label: 'Liên hệ' },
   ];
 
   const navLinkClass =
@@ -83,7 +83,7 @@ const Header = () => {
                 alt={appConfig.name}
                 width={140}
                 height={42}
-                className="h-9 w-auto sm:h-10 md:h-11 object-contain"
+                className="h-14 w-auto object-contain"
                 priority
               />
             </a>
@@ -119,11 +119,11 @@ const Header = () => {
 
               {/* Contact - Desktop */}
               <a
-                href={appConfig.navigation.contact}
+                href={appConfig.navigation.login}
                 className="hidden sm:inline-flex items-center gap-2 bg-primary hover:bg-primary-hover text-white px-4 py-2.5 rounded-full font-semibold text-sm transition-all duration-200 hover:shadow-lg hover:shadow-primary/25"
               >
-                <i className="fa-solid fa-envelope text-sm" />
-                Liên hệ
+                <i className="fa-solid fa-user text-sm" />
+                Đăng nhập
               </a>
 
               {/* Mobile Menu Button */}
@@ -154,18 +154,35 @@ const Header = () => {
 
       {/* Mobile Menu - Slide from right, glass style, rounded left */}
       <div
-        className={`mobile-menu fixed top-5 right-4 bottom-5 w-full max-w-[320px] sm:max-w-sm z-50 lg:hidden transform transition-transform duration-300 ease-out overflow-y-auto mobile-menu-glass ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        className={`mobile-menu fixed top-0 right-0 bottom-0 w-full max-w-[320px] sm:max-w-sm z-50 lg:hidden transform transition-transform duration-300 ease-out overflow-y-auto mobile-menu-glass ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
       >
-        <div className="pt-20 pb-8 px-6">
-          {/* Close button */}
-          <button
-            onClick={closeMenu}
-            className="absolute top-5 right-4 p-2 rounded-xl text-gray-500 hover:text-gray-700 hover:bg-white/50 transition-colors"
-            aria-label="Đóng menu"
-          >
-            <i className="fa-solid fa-xmark text-xl" />
-          </button>
+        <div className="pt-4 pb-8 px-6">
+          <div className="flex items-center justify-between">
+            {/* Logo */}
+            <a
+              href="/"
+              onClick={closeMenu}
+              className="flex items-center flex-shrink-0 rounded-xl transition-opacity hover:opacity-90"
+            >
+              <Image
+                src={appConfig.logo}
+                alt={appConfig.name}
+                width={140}
+                height={42}
+                className="h-16 w-auto object-contain"
+                priority
+              />
+            </a>
+            {/* Close button */}
+            <button
+              onClick={closeMenu}
+              className="p-2 rounded-xl text-gray-500 hover:text-gray-700 hover:bg-white/50 transition-colors"
+              aria-label="Đóng menu"
+            >
+              <i className="fa-solid fa-xmark text-xl" />
+            </button>
+          </div>
 
           <nav className="flex flex-col gap-1">
             {navLinks.map((link) => (
@@ -173,21 +190,21 @@ const Header = () => {
                 key={link.href}
                 href={link.href}
                 onClick={closeMenu}
-                className="flex items-center gap-3 py-3.5 px-4 rounded-2xl text-gray-700 font-medium hover:bg-white/80 hover:text-primary transition-all duration-200"
+                className={`${navLinkClass} ${isActive(link.href) ? 'text-primary' : ''}`}
               >
-                <i className="fa-solid fa-chevron-right text-primary/60 text-xs" />
+                <i className="fa-solid fa-chevron-right text-primary/60 text-xs mr-2" />
                 {link.label}
               </a>
             ))}
 
             {/* Contact CTA - Mobile */}
             <a
-              href={appConfig.navigation.contact}
+              href={appConfig.navigation.login}
               onClick={closeMenu}
-              className="mt-6 flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white py-4 px-6 rounded-2xl font-semibold transition-all duration-200"
+              className="mt-6 flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white py-4 px-6 rounded-full font-semibold transition-all duration-200"
             >
-              <i className="fa-solid fa-envelope" />
-              Liên hệ
+              <i className="fa-solid fa-user" />
+              Đăng nhập
             </a>
           </nav>
         </div>

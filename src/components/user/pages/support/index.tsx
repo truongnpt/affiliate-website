@@ -28,7 +28,7 @@ const Support = () => {
 
 
       {/* Page Header - Liquid glass */}
-      <div className="relative overflow-hidden mt-14">
+      <div className="relative overflow-hidden pt-14">
         <div className="absolute inset-0 " />
         <div className="relative max-w-7xl mx-auto py-14 sm:py-16 px-4 sm:px-6 lg:px-8">
           <div className="card-glass rounded-3xl p-8 sm:p-10 text-center">

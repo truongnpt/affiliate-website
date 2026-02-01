@@ -1,13 +1,42 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
+import { contactFormTemplate } from '@/email-templates/contact-form';
 
 const Contact = () => {
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const form = new FormData(e.target);
+    const body = contactFormTemplate(form.get("name"), form.get("email"), form.get("message"));
+
+    try {
+      const response = await fetch("/api/send-mail", {
+        method: "POST",
+        body: JSON.stringify({ subject: 'Contact from website', html: body }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        setSuccess('Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi bạn trong vòng 24 giờ.');
+      } else {
+        setError('Lỗi kết nối. Vui lòng thử lại.');
+      }
+    } catch (error) {
+      setError('Lỗi kết nối. Vui lòng thử lại.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-50/80 via-white to-gray-50/50 pb-20">
 
 
       {/* Page Header - Liquid glass */}
-      <div className="relative overflow-hidden mt-14">
+      <div className="relative overflow-hidden pt-14">
         <div className="absolute inset-0 " />
         <div className="relative max-w-7xl mx-auto py-14 sm:py-16 px-4 sm:px-6 lg:px-8">
           <div className="card-glass rounded-3xl p-8 sm:p-10 text-center">
@@ -99,20 +128,20 @@ const Contact = () => {
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Gửi tin nhắn cho chúng tôi</h2>
               </div>
               <p className="text-gray-600 mb-8 text-sm">Điền thông tin bên dưới, chúng tôi sẽ phản hồi bạn trong vòng 24 giờ</p>
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="fullName" className="block text-sm font-semibold text-gray-700 mb-2">Họ và tên</label>
-                    <input type="text" id="fullName" placeholder="Nhập họ và tên" className="w-full px-4 py-3 rounded-xl bg-white/60 border border-gray-200/80 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" />
+                    <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">Họ và tên</label>
+                    <input type="text" id="name" name="name" placeholder="Nhập họ và tên" className="w-full px-4 py-3 rounded-xl bg-white/60 border border-gray-200/80 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" />
                   </div>
                   <div>
                     <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
-                    <input type="email" id="email" placeholder="your.email@example.com" className="w-full px-4 py-3 rounded-xl bg-white/60 border border-gray-200/80 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" />
+                    <input type="email" id="email" name="email" placeholder="your.email@example.com" className="w-full px-4 py-3 rounded-xl bg-white/60 border border-gray-200/80 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" />
                   </div>
                 </div>
                 <div>
                   <label htmlFor="subject" className="block text-sm font-semibold text-gray-700 mb-2">Chủ đề cần hỗ trợ</label>
-                  <select id="subject" className="w-full px-4 py-3 rounded-xl bg-white/60 border border-gray-200/80 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all">
+                  <select id="subject" name="subject" className="w-full px-4 py-3 rounded-xl bg-white/60 border border-gray-200/80 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all">
                     <option value="">-- Chọn chủ đề --</option>
                     <option value="link-product">Vấn đề về link sản phẩm</option>
                     <option value="how-to-buy">Hướng dẫn mua hàng</option>
@@ -124,13 +153,15 @@ const Contact = () => {
                 </div>
                 <div>
                   <label htmlFor="message" className="block text-sm font-semibold text-gray-700 mb-2">Nội dung tin nhắn</label>
-                  <textarea id="message" rows={5} placeholder="Mô tả chi tiết vấn đề hoặc câu hỏi của bạn..." className="w-full px-4 py-3 rounded-xl bg-white/60 border border-gray-200/80 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none" />
+                  <textarea id="message" name="message" rows={5} placeholder="Mô tả chi tiết vấn đề hoặc câu hỏi của bạn..." className="w-full px-4 py-3 rounded-xl bg-white/60 border border-gray-200/80 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none" />
                   <p className="text-xs text-gray-500 mt-1">Vui lòng mô tả chi tiết để chúng tôi có thể hỗ trợ bạn tốt nhất</p>
                 </div>
                 <button type="submit" className="w-full bg-primary hover:bg-primary-hover text-white py-4 rounded-2xl font-bold text-lg transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:scale-[1.02]">
-                  <i className="fa-solid fa-paper-plane" />
-                  Gửi tin nhắn
+                  {loading ? <i className="fa-solid fa-spinner fa-spin" /> : <i className="fa-solid fa-paper-plane" />}
+                  {loading ? 'Đang gửi...' : 'Gửi tin nhắn'}
                 </button>
+                {error && <div className="text-red-500 text-sm mt-2 p-2 rounded-lg bg-red-50"><i className="fa-solid fa-exclamation-circle mr-2" />{error}</div>}
+                {success && <div className="text-green-500 text-sm mt-2 p-2 rounded-lg bg-green-50"><i className="fa-solid fa-check-circle mr-2" />{success}</div>}
               </form>
               <div className="mt-8 pt-6 border-t border-gray-200">
                 <div className="flex items-start gap-3 text-sm text-gray-600">

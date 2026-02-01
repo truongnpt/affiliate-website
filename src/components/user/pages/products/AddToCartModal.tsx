@@ -14,7 +14,6 @@ export interface AddToCartModalProduct {
     id?: number;
   };
   image: string;
-  url: string;
   rating: number;
   sales: number;
   slug?: string;
@@ -71,7 +70,6 @@ const AddToCartModal = ({ product, isOpen, onClose }: AddToCartModalProps) => {
       price: product.price,
       discount: product.discount,
       image: product.image,
-      url: product.url,
       slug: product.slug,
       product_categories: product.product_categories,
       quantity,

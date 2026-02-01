@@ -18,11 +18,10 @@ export default function CreateProductPage() {
     discount: '0',
     category_id: '',
     image: '',
-    url: '',
     rating: '0',
     sales: '0',
     description: '',
-    is_buy: false,
+    is_buy: true,
   });
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -62,7 +61,6 @@ export default function CreateProductPage() {
     }
     if (!formData.category_id) newErrors.category_id = 'Danh mục là bắt buộc';
     if (!formData.image.trim()) newErrors.image = 'Hình ảnh là bắt buộc';
-    if (!formData.url.trim()) newErrors.url = 'Link sản phẩm là bắt buộc';
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -77,7 +75,6 @@ export default function CreateProductPage() {
       discount: Number(formData.discount) || 0,
       category_id: Number(formData.category_id),
       image: formData.image.trim(),
-      url: formData.url.trim(),
       rating: Number(formData.rating) || 0,
       sales: Number(formData.sales) || 0,
       description: formData.description.trim() || undefined,
@@ -88,20 +85,20 @@ export default function CreateProductPage() {
   const handleChange = (field: string, value: string | boolean) => {
     setFormData(prev => {
       const updated = { ...prev, [field]: value };
-      
+
       // Auto-generate slug from name if name is changed and slug hasn't been manually edited
       if (field === 'name' && !isSlugManuallyEdited && typeof value === 'string') {
         updated.slug = generateSlug(value);
       }
-      
+
       // Track if slug is manually edited
       if (field === 'slug') {
         setIsSlugManuallyEdited(true);
       }
-      
+
       return updated;
     });
-    
+
     if (errors[field]) {
       setErrors(prev => {
         const newErrors = { ...prev };
@@ -148,9 +145,8 @@ export default function CreateProductPage() {
                     type="text"
                     value={formData.name}
                     onChange={(e) => handleChange('name', e.target.value)}
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent ${
-                      errors.name ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent ${errors.name ? 'border-red-500' : 'border-gray-300'
+                      }`}
                     placeholder="Nhập tên sản phẩm"
                   />
                   {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
@@ -172,7 +168,7 @@ export default function CreateProductPage() {
                       type="button"
                       onClick={handleGenerateSlug}
                       disabled={!formData.name.trim()}
-                      className="px-4 py-2 bg-[primary] text-white rounded-lg hover:bg-primary-hover disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500 transition-colors"
+                      className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500 transition-colors"
                       title="Tạo slug từ tên sản phẩm"
                     >
                       <i className="fas fa-magic"></i>
@@ -206,26 +202,10 @@ export default function CreateProductPage() {
                     placeholder="Nhập mô tả sản phẩm"
                   />
                 </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Link sản phẩm <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="url"
-                    value={formData.url}
-                    onChange={(e) => handleChange('url', e.target.value)}
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent ${
-                      errors.url ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    placeholder="https://..."
-                  />
-                  {errors.url && <p className="mt-1 text-sm text-red-600">{errors.url}</p>}
-                </div>
               </div>
             </div>
           </div>
-          
+
 
           {/* Sidebar */}
           <div className="space-y-6">
@@ -240,9 +220,8 @@ export default function CreateProductPage() {
                   type="url"
                   value={formData.image}
                   onChange={(e) => handleChange('image', e.target.value)}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent ${
-                    errors.image ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent ${errors.image ? 'border-red-500' : 'border-gray-300'
+                    }`}
                   placeholder="https://..."
                 />
                 {errors.image && <p className="mt-1 text-sm text-red-600">{errors.image}</p>}
@@ -273,9 +252,8 @@ export default function CreateProductPage() {
                     value={formData.price}
                     onChange={(e) => handleChange('price', e.target.value)}
                     min="0"
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent ${
-                      errors.price ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent ${errors.price ? 'border-red-500' : 'border-gray-300'
+                      }`}
                     placeholder="0"
                   />
                   {errors.price && <p className="mt-1 text-sm text-red-600">{errors.price}</p>}
@@ -303,9 +281,8 @@ export default function CreateProductPage() {
                   <select
                     value={formData.category_id}
                     onChange={(e) => handleChange('category_id', e.target.value)}
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent ${
-                      errors.category_id ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[primary] focus:border-transparent ${errors.category_id ? 'border-red-500' : 'border-gray-300'
+                      }`}
                   >
                     <option value="">Chọn danh mục</option>
                     {categories.map((cat: any) => (
@@ -371,14 +348,12 @@ export default function CreateProductPage() {
                   <button
                     type="button"
                     onClick={() => handleChange('is_buy', !formData.is_buy)}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[primary] focus:ring-offset-2 ${
-                      formData.is_buy ? 'bg-[primary]' : 'bg-gray-300'
-                    }`}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[primary] focus:ring-offset-2 ${formData.is_buy ? 'bg-primary' : 'bg-gray-300'
+                      }`}
                   >
                     <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        formData.is_buy ? 'translate-x-6' : 'translate-x-1'
-                      }`}
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${formData.is_buy ? 'translate-x-6' : 'translate-x-1'
+                        }`}
                     />
                   </button>
                 </div>

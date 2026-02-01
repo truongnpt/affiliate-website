@@ -15,7 +15,6 @@ interface ProductCardProps {
       id?: number;
     };
     image: string;
-    url: string;
     rating: number;
     sales: number;
     slug?: string;
@@ -38,7 +37,6 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
     discount: product.discount,
     product_categories: product.product_categories,
     image: product.image,
-    url: product.url,
     rating: product.rating,
     sales: product.sales,
     slug: product.slug,
@@ -57,23 +55,13 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
       <div className="card-glass card-glass-hover rounded-2xl overflow-hidden border border-white/60 transition-all duration-300 group h-full flex flex-col">
         {/* Image */}
         <div className="relative h-52 sm:h-56 bg-gray-100 overflow-hidden">
-          {product.slug ? (
-            <Link href={`/products/${product.slug}`}>
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-              />
-            </Link>
-          ) : (
-            <a href={product.url} target="_blank" rel="noopener noreferrer">
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-              />
-            </a>
-          )}
+          <Link href={`/products/${product.slug}`}>
+            <img
+              src={product.image}
+              alt={product.name}
+              className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+            />
+          </Link>
           {product.discount > 0 && (
             <div className="absolute top-3 right-3">
               <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-primary text-white text-xs font-bold shadow-lg">
@@ -93,23 +81,12 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
           </div>
 
           <h3 className="text-gray-900 font-bold text-base sm:text-lg mb-3 line-clamp-2 min-h-[3rem] group-hover:text-primary transition-colors duration-200">
-            {product.slug ? (
-              <Link
-                href={`/products/${product.slug}`}
-                className="hover:underline decoration-2 underline-offset-2"
-              >
-                {product.name}
-              </Link>
-            ) : (
-              <a
-                href={product.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline decoration-2 underline-offset-2"
-              >
-                {product.name}
-              </a>
-            )}
+            <Link
+              href={`/products/${product.slug}`}
+              className="hover:underline decoration-2 underline-offset-2"
+            >
+              {product.name}
+            </Link>
           </h3>
 
           {/* Price */}

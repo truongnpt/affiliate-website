@@ -8,7 +8,6 @@ export interface CartItem {
   price: number;
   discount: number;
   image: string;
-  url: string;
   slug?: string;
   quantity: number;
   product_categories?: {

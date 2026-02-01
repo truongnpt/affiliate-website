@@ -9,7 +9,7 @@ const About = () => {
       {/* Hero - Liquid glass overlay */}
       <section className="relative h-[480px] sm:h-[560px] flex items-center overflow-hidden">
         <img
-          src="/images/about-banner.png"
+          src="/images/banner-about.png"
           alt="Thực phẩm khô"
           className="absolute inset-0 w-full h-full object-cover"
         />

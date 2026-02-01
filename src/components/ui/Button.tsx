@@ -18,12 +18,12 @@ export default function Button({
 }: ButtonProps) {
   const baseStyles =
     'font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
-  
+
   const variantStyles = {
     primary:
       'bg-primary text-white hover:bg-primary/80 focus:ring-primary',
     secondary:
-      'bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500',
+      'bg-gray-300 text-gray-700 hover:bg-gray-400 focus:ring-gray-400',
     outline:
       'border-2 border-primary text-primary hover:bg-primary hover:text-white focus:ring-primary',
   };

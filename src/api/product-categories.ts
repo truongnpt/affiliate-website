@@ -34,10 +34,15 @@ const deleteById = async (id: number) => {
   return await productCategoriesService.deleteById(id);
 };
 
+const getFeatured = async (limit?: number) => {
+  return await productCategoriesService.getFeatured(limit);
+};
+
 export const apiProductCategories = {
     getList,
     getById,
     create,
     update,
     deleteById,
+    getFeatured,
 };

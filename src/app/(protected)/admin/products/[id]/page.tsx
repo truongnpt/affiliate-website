@@ -21,7 +21,7 @@ export default function ProductDetailPage() {
         </Button>
       </div>
     );
-  } 
+  }
 
   const { data: productData, isLoading } = useQuery({
     queryKey: ['product', id],
@@ -52,6 +52,8 @@ export default function ProductDetailPage() {
       </div>
     );
   }
+
+  const productUrl = `${process.env.NEXT_PUBLIC_APP_URL}/products/${product.slug}`;
 
   return (
     <div>
@@ -117,12 +119,12 @@ export default function ProductDetailPage() {
                 <dt className="text-sm font-medium text-gray-500">Link sản phẩm</dt>
                 <dd className="mt-1">
                   <a
-                    href={product.url}
+                    href={productUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm text-primary hover:underline break-all"
                   >
-                    {product.url}
+                    {productUrl}
                     <i className="fas fa-external-link-alt ml-2"></i>
                   </a>
                 </dd>
@@ -185,7 +187,7 @@ export default function ProductDetailPage() {
               <Button
                 variant="primary"
                 className="w-full"
-                onClick={() => window.open(product.url, '_blank')}
+                onClick={() => window.open(productUrl, '_blank')}
               >
                 <i className="fas fa-external-link-alt mr-2"></i>
                 Mở link sản phẩm
