@@ -21,13 +21,14 @@ interface ProductCardProps {
   };
   /** Khi được truyền (vd. trang danh sách sản phẩm), modal render ở parent; khi không truyền thì modal render trong card */
   onAddToCart?: (product: AddToCartModalProduct) => void;
+  className?: string;
 }
 
-const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
+const ProductCard = ({ product, onAddToCart, className }: ProductCardProps) => {
   const [isAddToCartOpenLocal, setIsAddToCartOpenLocal] = useState(false);
 
   const salePrice = product.discount
-    ? Math.round(product.price * (1 - product.discount / 100))
+    ? product.price - Math.round(product.price * product.discount / 100)
     : product.price;
 
   const productForModal: AddToCartModalProduct = {
@@ -52,9 +53,9 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
 
   return (
     <>
-      <div className="card-glass card-glass-hover rounded-2xl overflow-hidden border border-white/60 transition-all duration-300 group h-full flex flex-col">
+      <div className={`card-glass card-glass-hover rounded-md md:rounded-2xl overflow-hidden border border-white/60 transition-all duration-300 group h-full flex flex-col ${className}`}>
         {/* Image */}
-        <div className="relative h-52 sm:h-56 bg-gray-100 overflow-hidden">
+        <div className="relative h-30 md:h-56 bg-gray-100 overflow-hidden">
           <Link href={`/products/${product.slug}`}>
             <img
               src={product.image}
@@ -72,15 +73,15 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
         </div>
 
         {/* Content */}
-        <div className="p-5 flex-1 flex flex-col">
+        <div className="p-2 md:p-5 flex-1 flex flex-col">
           <div className="flex items-center gap-2 mb-2">
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary uppercase tracking-wide">
-              <i className="fa-solid fa-tag text-[10px]" />
+              <i className="fa-solid fa-tag text-[8px] md:text-base" />
               {product.product_categories.name}
             </span>
           </div>
 
-          <h3 className="text-gray-900 font-bold text-base sm:text-lg mb-3 line-clamp-2 min-h-[3rem] group-hover:text-primary transition-colors duration-200">
+          <h3 className="text-gray-900 font-bold text-base sm:text-lg mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-200">
             <Link
               href={`/products/${product.slug}`}
               className="hover:underline decoration-2 underline-offset-2"
@@ -91,11 +92,11 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
 
           {/* Price */}
           <div className="mb-4">
-            <span className="text-gray-900 font-bold text-xl">
+            <span className="text-gray-900 font-bold text-sm md:text-xl">
               {salePrice.toLocaleString('vi-VN')}đ
             </span>
             {product.discount > 0 && (
-              <span className="ml-2 text-sm text-gray-400 line-through">
+              <span className="ml-2 text-xs md:text-sm text-gray-400 line-through">
                 {product.price.toLocaleString('vi-VN')}đ
               </span>
             )}
@@ -114,9 +115,9 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
           <button
             type="button"
             onClick={handleAddToCartClick}
-            className="mt-auto cursor-pointer w-full py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary-hover transition-all duration-300 flex justify-center items-center gap-2 shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98]"
+            className="mt-auto cursor-pointer w-full py-2 md:py-3 rounded-md md:rounded-xl bg-primary text-white font-bold text-xs md:text-sm hover:bg-primary-hover transition-all duration-300 flex justify-center items-center gap-2 shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98]"
           >
-            <i className="fa-solid fa-cart-plus text-base" />
+            <i className="fa-solid fa-cart-plus text-xs md:text-base" />
             Thêm vào giỏ hàng
           </button>
         </div>

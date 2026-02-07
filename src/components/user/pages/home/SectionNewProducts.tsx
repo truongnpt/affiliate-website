@@ -30,7 +30,7 @@ const SectionNewProducts = () => {
       let newItemsPerPage;
       if (width < 640) {
         // Mobile: 1 item
-        newItemsPerPage = 1;
+        newItemsPerPage = 2;
       } else if (width < 1024) {
         // Tablet: 2 items
         newItemsPerPage = 2;

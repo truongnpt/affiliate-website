@@ -55,8 +55,8 @@ const AddToCartModal = ({ product, isOpen, onClose }: AddToCartModalProps) => {
 
   if (!isOpen) return null;
 
-  const originalPrice = product.discount
-    ? Math.round(product.price * (1 - product.discount / 100)) + product.price
+  const salePrice = product.discount
+    ? product.price - Math.round(product.price * product.discount / 100)
     : product.price;
 
   const handleAddToCart = () => {
@@ -95,7 +95,7 @@ const AddToCartModal = ({ product, isOpen, onClose }: AddToCartModalProps) => {
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors"
+          className="absolute top-1 right-1 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors"
           aria-label="Đóng"
         >
           <i className="fa-solid fa-xmark text-xl"></i>
@@ -116,7 +116,7 @@ const AddToCartModal = ({ product, isOpen, onClose }: AddToCartModalProps) => {
               />
               {product.discount > 0 && (
                 <div className="absolute top-3 right-3 bg-primary text-white text-sm font-bold px-3 py-1.5 rounded-full">
-                  -{product.discount}% GIẢM
+                  -{product.discount}%
                 </div>
               )}
             </div>
@@ -146,28 +146,23 @@ const AddToCartModal = ({ product, isOpen, onClose }: AddToCartModalProps) => {
               <span>{product.sales?.toLocaleString('vi-VN') || 0} đã bán</span>
             </div>
 
-            {/* Price */}
-            <div className="bg-primary/10 rounded-xl p-4 border border-primary/20 mb-6">
-              <div className="flex items-baseline gap-3 flex-wrap">
+            <div className="flex flex-row md:flex-col items-end md:items-start gap-4 mb-6 md:mb-0">
+              {/* Price */}
+            <div className="md:mb-0">
+              <div className="flex items-baseline gap-1 flex-wrap">
                 {product.discount > 0 && (
-                  <span className="text-lg text-gray-400 line-through">
-                    {originalPrice.toLocaleString('vi-VN')}đ
+                  <span className="text-sm text-red-400 line-through">
+                    {product.price.toLocaleString('vi-VN')}đ
                   </span>
                 )}
                 <span className="text-2xl font-bold text-primary">
-                  {product.price.toLocaleString('vi-VN')}đ
+                  {salePrice.toLocaleString('vi-VN')}đ
                 </span>
-                {product.discount > 0 && (
-                  <span className="text-sm text-gray-600">
-                    (Tiết kiệm {(originalPrice - product.price).toLocaleString('vi-VN')}đ)
-                  </span>
-                )}
               </div>
             </div>
 
             {/* Quantity */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Số lượng</label>
+            <div className="md:mb-6">
               <div className="flex items-center gap-3">
                 <button
                   type="button"
@@ -185,7 +180,7 @@ const AddToCartModal = ({ product, isOpen, onClose }: AddToCartModalProps) => {
                     const v = parseInt(e.target.value, 10);
                     if (!Number.isNaN(v)) setQuantity(Math.max(1, v));
                   }}
-                  className="w-20 text-center border border-gray-300 rounded-lg py-2 font-semibold focus:ring-2 focus:ring-primary focus:border-primary"
+                  className="w-15 text-center border border-gray-300 rounded-lg py-2 font-semibold focus:ring-2 focus:ring-primary focus:border-primary"
                 />
                 <button
                   type="button"
@@ -196,6 +191,7 @@ const AddToCartModal = ({ product, isOpen, onClose }: AddToCartModalProps) => {
                   <i className="fa-solid fa-plus text-sm"></i>
                 </button>
               </div>
+            </div>
             </div>
 
             {/* Actions */}

@@ -90,6 +90,7 @@ const Checkout = () => {
     onSuccess: (order) => {
       showToast('Chúng tôi đã nhận đơn hàng của bạn.', { variant: 'success', title: 'Đặt hàng thành công' });
       setShowOrderSuccess(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       // Gửi email thông báo đơn hàng mới
       try {
         const emailHtml = orderTemplate({
@@ -170,7 +171,7 @@ const Checkout = () => {
           <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
             <i className="fa-solid fa-circle-check text-3xl text-primary" />
           </div>
-          <p className="text-gray-500 font-medium">Chúng tôi đã nhận đơn hàng của bạn. Cảm ơn bạn đã mua hàng.</p>
+          <p className="text-gray-500 font-medium text-center">Chúng tôi đã nhận đơn hàng của bạn. Cảm ơn bạn đã mua hàng.</p>
           <div className="flex items-center gap-2">
             <Link href="/products" className="text-primary font-medium"><Button><i className="fa-solid fa-shopping-bag mr-2" /> Tiếp tục mua sắm</Button></Link>
           </div>

@@ -92,8 +92,9 @@ const ProductDetail = () => {
     );
   }
 
-  const salePrice = product.discount ? Math.round(product.price * (1 - product.discount / 100)) : product.price;
-
+  const salePrice = product.discount
+    ? product.price - Math.round(product.price * product.discount / 100)
+    : product.price;
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-50/80 via-white to-gray-50/50 pb-16">
 
@@ -156,8 +157,7 @@ const ProductDetail = () => {
                 {product.discount > 0 && (
                   <>
                     <span className="text-xl text-gray-400 line-through">{product.price.toLocaleString('vi-VN')}đ</span>
-                    <span className="text-sm text-gray-600">(Tiết kiệm {(product.price - salePrice).toLocaleString('vi-VN')}đ)</span>
-                  </>
+                    </>
                 )}
               </div>
             </div>
